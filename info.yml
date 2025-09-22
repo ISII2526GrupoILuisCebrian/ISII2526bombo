@@ -4,7 +4,7 @@ project:
   teamId: 'bombo'
   identities: {}
   notifications:
-    email: 'luis.cebrian1@alu.uclm.es,Angel.Pieiga@alu.uclm.es'
+    email: 'luis.cebrian1@alu.uclm.es,Angel.Pieiga@alu.uclm.es,Santis.Mednieks1@alu.uclm.es'
   members:
     member1:
       name: 'Luis'
@@ -13,5 +13,8 @@ project:
     member2:
       name: 'Angel'
       surname: 'Pieiga' 
-      githubUsername: 'Name1gitUserName2'
-    
+      githubUsername: 'angelpieiga10'
+    member3:
+      name: 'Santis '
+      surname: 'Mednieks' 
+      githubUsername: 'san40pancho'
