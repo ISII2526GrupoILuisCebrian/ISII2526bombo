@@ -4,9 +4,14 @@
     nameof(CustomerId))]
     public class ReportCustomer
     {
-        
-        public int BanReportId { get; set; }        
-        public int CustomerId { get; set; }
+        [Range(1, 999999, ErrorMessage = "BanReportId must be between 1 and 999999")]
+        public int BanReportId { get; set; } // FK: it reffers to the Id of BanReport class
+
+        [Range(1, int.MaxValue, ErrorMessage = "CustomerId must be between 1 and 999999")]
+        [Key]
+        public int CustomerId { get; set; } // PK
+
+        [StringLength(500, ErrorMessage = "Message cannot be longer than 500 characters.")]
         public string Message { get; set; }
 
 
