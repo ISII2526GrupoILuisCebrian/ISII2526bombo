@@ -15,7 +15,7 @@
         [StringLength(500, ErrorMessage = "Message cannot be longer than 500 characters.")]
         public string Message { get; set; } 
 
-        public string testing { get; set; } // just for testing purposes
+        
 
 
     }
