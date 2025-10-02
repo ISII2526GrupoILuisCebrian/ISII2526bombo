@@ -8,7 +8,7 @@
         public string City { get; set; }
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
-        [Display(Name = "Release Date")]
+        [Display(Name = "Date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ReleaseDate { get; set; }
 
