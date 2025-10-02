@@ -8,5 +8,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Product> Products { get; set; }
 
     public DbSet<ReportCustomer> ReportCustomers { get; set; }
+
     public DbSet<BanReport> BanReports { get; set; }
+
+    public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 }
