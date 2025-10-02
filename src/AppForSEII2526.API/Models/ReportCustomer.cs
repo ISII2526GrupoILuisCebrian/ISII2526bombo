@@ -12,7 +12,7 @@
         public int CustomerId { get; set; } // PK
 
         [StringLength(500, ErrorMessage = "Message cannot be longer than 500 characters.")]
-        public string Message { get; set; }
+        public string Message { get; set; } // testing purpose
 
 
     }
