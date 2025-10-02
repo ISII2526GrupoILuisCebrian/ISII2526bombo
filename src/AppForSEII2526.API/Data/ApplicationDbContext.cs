@@ -9,4 +9,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ReportCustomer> ReportCustomers { get; set; }
     public DbSet<BanReport> BanReports { get; set; }
+    
 }
