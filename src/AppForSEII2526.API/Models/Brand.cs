@@ -9,8 +9,5 @@
 
         [StringLength(50, ErrorMessage = "Name cannot be longer than 50 characters.")]
         public string Name { get; set; }
-
-        //Relation with Product (1 Brand - N Products)
-        public List<Product> Products { get; set; }
     }
 }
