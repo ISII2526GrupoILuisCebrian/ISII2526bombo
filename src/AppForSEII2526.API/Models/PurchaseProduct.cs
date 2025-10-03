@@ -12,5 +12,8 @@
 
         [Range(1, 10, ErrorMessage = "Quantity must be between 1 and 10")]
         public int Quantity { get; set; }
+
+        public Product Product { get; set; }
+
     }
 }
