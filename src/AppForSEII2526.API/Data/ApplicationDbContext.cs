@@ -15,10 +15,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<BanReport> BanReports { get; set; }
 
-<<<<<<< HEAD
+
     public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-=======
+
     public DbSet<ComplaintType> ComplaintTypes { get; set; }
     
->>>>>>> origin/development
+
 }
