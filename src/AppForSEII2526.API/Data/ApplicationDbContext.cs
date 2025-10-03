@@ -32,4 +32,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<PaymentMethod>()
+            .HasDiscriminator<string>("PaymentType")
+            .HasValue<PayPal>("PayPal")
+            .HasValue<Bizum>("Bizum");
+    }
+
+
 }
