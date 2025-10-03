@@ -36,5 +36,7 @@
 
         public PurchaseState PurchaseState { get; set; }
 
+        public List<PurchaseProduct> PurchaseProducts { get; set; }
+
     }
 }

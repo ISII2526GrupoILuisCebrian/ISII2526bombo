@@ -15,5 +15,7 @@
 
         public Product Product { get; set; }
 
+        public PurchaseOrder PurchaseOrder { get; set; }
+
     }
 }
