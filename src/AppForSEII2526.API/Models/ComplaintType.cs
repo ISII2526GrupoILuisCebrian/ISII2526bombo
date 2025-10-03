@@ -9,6 +9,6 @@
 
 
         //Relationships
-        public List<Complaint> Complaints { get; set; } // Navigation property to Complaint
+        
     }
 }
