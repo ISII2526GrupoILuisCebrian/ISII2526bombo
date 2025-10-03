@@ -1,11 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Elfie.Diagnostics;
-
-namespace AppForSEII2526.API.Models
+﻿namespace AppForSEII2526.API.Models
 {
-    public enum PriorityType
+    public class DeliveryAssignment
     {
-        High,
-        Medium,
-        Low
     }
 }
