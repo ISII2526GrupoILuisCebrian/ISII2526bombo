@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
 
+
         [StringLength(100, ErrorMessage = "City cannot exceed 100 characters.")]
         public string City { get; set; }
 
@@ -30,5 +31,10 @@
 
         [Precision(10, 2)]
         public decimal TotalPrice { get; set; }
+
+        public IList<PurchaseDelivery> PurchaseDeliveries { get; set; }
+
+        public PurchaseState PurchaseState { get; set; }
+
     }
 }
