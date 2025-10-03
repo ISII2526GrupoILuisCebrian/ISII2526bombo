@@ -41,6 +41,6 @@
 
         public PaymentMethod PaymentMethod { get; set; } // 1 to 1 with PaymentMethod
 
-        public PurchaseState PurchaseState { get; set; } // 1 to 1 with PurchaseState
+        public PurchaseState State { get; set; } // 1 to 1 with PurchaseState
     }
 }
