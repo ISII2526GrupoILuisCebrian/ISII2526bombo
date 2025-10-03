@@ -36,12 +36,11 @@
 
         public IList<PurchaseDelivery> PurchaseDeliveries { get; set; }
 
-        public PurchaseState PurchaseState { get; set; }
-
         //Relations
         public List<PurchaseProduct> PurchaseProducts { get; set; } // 1 to N with PurchaseProduct
 
         public PaymentMethod PaymentMethod { get; set; } // 1 to 1 with PaymentMethod
 
+        public PurchaseState PurchaseState { get; set; } // 1 to 1 with PurchaseState
     }
 }
