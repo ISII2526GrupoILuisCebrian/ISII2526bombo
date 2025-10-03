@@ -8,5 +8,7 @@
         [StringLength(50, ErrorMessage = "Name can be neither longer than 50 characters nor shorter than 10.", MinimumLength=10)]
         [Required]
         public string Name { get; set; }
+        public List<PurchaseDelivery> Assignments { get; set; }
+
     }
 }
