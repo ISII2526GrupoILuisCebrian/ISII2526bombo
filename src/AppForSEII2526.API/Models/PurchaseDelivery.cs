@@ -11,10 +11,6 @@
         [Required]
         public int PurchaseOrderInt { get; set; }
 
-        public PurchaseDelivery()
-        {
-
-        }
 
         enum PriorityType
         {
