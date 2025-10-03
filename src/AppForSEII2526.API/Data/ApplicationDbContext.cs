@@ -21,6 +21,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<BanReport> BanReports { get; set; }
 
+
+    public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+
     public DbSet<ComplaintType> ComplaintTypes { get; set; }
 
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
@@ -33,6 +36,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -40,7 +44,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<PaymentMethod>()
             .HasDiscriminator<string>("PaymentMethodType")
             .HasValue<PayPal>("PayPal")
-            .HasValue<Bizum>("Bizum");
+            .HasValue<Bizum>("Bizum")
+            .HasValue<CreditCard>("CreditCard");
     }
 
 
