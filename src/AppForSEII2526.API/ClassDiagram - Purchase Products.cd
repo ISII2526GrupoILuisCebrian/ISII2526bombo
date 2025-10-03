@@ -37,12 +37,22 @@
   <Class Name="AppForSEII2526.API.Models.PurchaseOrder">
     <Position X="8.75" Y="2.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>QAADAAAAACAgAAAIIAAAEAAAAAAAQAEBABIABAAAAAA=</HashCode>
+      <HashCode>QAEDAAAAACAgAAAIIAAAEAAAAAAAQAEBABIABAAAAAA=</HashCode>
       <FileName>Models\PurchaseOrder.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="State" />
+    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="PurchaseProducts" />
     </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ApplicationUser">
+    <Position X="11.75" Y="3" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAQQBAAAAIgCAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Enum Name="AppForSEII2526.API.Models.PurchaseState">
     <Position X="9.25" Y="0.5" Width="1.5" />

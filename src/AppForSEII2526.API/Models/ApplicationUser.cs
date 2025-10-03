@@ -25,6 +25,7 @@ public class ApplicationUser : IdentityUser
     //Relationships
     public List<Complaint> Complaints { get; set; } // Navigation property to Complaint
     public List<ReportCustomer> ReportCustomers { get; set; } // Navigation property to ReportCustomer
+    public List<PurchaseOrder> PurchaseOrders { get; set; } // Navigation property to PurchaseOrder
 
 
 }

@@ -42,5 +42,7 @@
         public PaymentMethod PaymentMethod { get; set; } // 1 to 1 with PaymentMethod
 
         public PurchaseState State { get; set; } // 1 to 1 with PurchaseState
+
+        public Customer Customer { get; set; } // N to 1 with Customer
     }
 }
