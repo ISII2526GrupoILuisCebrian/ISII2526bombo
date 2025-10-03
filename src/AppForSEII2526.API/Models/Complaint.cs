@@ -17,8 +17,8 @@
         public bool Processed { get; set; }
 
         //Relationships
-        //public Customer Customers { get; set; } // Navigation property to Customer. I DON'T KNOW WHAT TO INTERPRET WITH 'CUSTOMER'
+        public ApplicationUser Customer { get; set; } // Navigation property to Customer.        
 
-        public ComplaintType ComplaintType { get; set; } // Navigation property to ComplaintType
+        public ComplaintType Type { get; set; } // Navigation property to ComplaintType
     }
 }
