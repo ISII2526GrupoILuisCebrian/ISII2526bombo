@@ -15,10 +15,14 @@
         [StringLength(500, ErrorMessage = "Message cannot be longer than 500 characters.")]
         public string Message { get; set; } 
 
+        public ReportState State { get; set; } // Enum: InProgress, Rejected
+
         //Relationships
         public BanReport BanReport { get; set; } // Navigation property to BanReport
 
         //public Customer Customers { get; set; } // Navigation property to Customer. I DON'T KNOW WHAT TO INTERPRET WITH 'CUSTOMER'
+
+        public ReportState ReportState { get; set; } // Enum: InProgress, Rejected
 
     }
 }
