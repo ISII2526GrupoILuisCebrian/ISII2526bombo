@@ -11,5 +11,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<BanReport> BanReports { get; set; }
 
     public DbSet<ComplaintType> ComplaintTypes { get; set; }
-    
+
+    public DbSet<Complaint> Complaints { get; set; }
+
 }
