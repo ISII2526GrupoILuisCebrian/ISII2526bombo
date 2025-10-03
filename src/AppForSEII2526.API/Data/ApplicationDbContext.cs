@@ -26,6 +26,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<PayPal> PayPals { get; set; }
 
+    public DbSet<CreditCard> CreditCards { get; set; }
+
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
