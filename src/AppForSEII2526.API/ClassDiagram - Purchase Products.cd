@@ -48,11 +48,14 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.ApplicationUser">
-    <Position X="11.75" Y="3" Width="3" />
+    <Position X="13" Y="3" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAQAAAAAAAAAAAAAAAAAAQQBAAAAIgCAAAAAAAAAAA=</HashCode>
       <FileName>Models\ApplicationUser.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="PurchaseOrders" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Enum Name="AppForSEII2526.API.Models.PurchaseState">
     <Position X="9.25" Y="0.5" Width="1.5" />
