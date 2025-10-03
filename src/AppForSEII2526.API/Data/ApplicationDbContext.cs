@@ -5,7 +5,8 @@ using AppForSEII2526.API.Models;
 namespace AppForSEII2526.API.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options) {
-       public DbSet<Brand> Brands { get; set; }
+
+    public DbSet<Brand> Brands { get; set; }
 
     public DbSet<PurchaseProduct> PurchaseProducts { get; set; }
 
@@ -28,9 +29,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<PayPal> PayPals { get; set; }
 
 
-<<<<<<< HEAD
 
-=======
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
->>>>>>> origin/development
+
 }
