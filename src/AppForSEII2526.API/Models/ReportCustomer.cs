@@ -22,7 +22,7 @@
 
         //public Customer Customers { get; set; } // Navigation property to Customer. I DON'T KNOW WHAT TO INTERPRET WITH 'CUSTOMER'
 
-        public ReportState ReportState { get; set; } // Enum: InProgress, Rejected
+      
 
     }
 }
