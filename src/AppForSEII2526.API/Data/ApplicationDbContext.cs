@@ -25,25 +25,20 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
     
-
     public DbSet<Complaint> Complaints { get; set; }
-
 
     public DbSet<Bizum> Bizums { get; set; }
 
     public DbSet<PayPal> PayPals { get; set; }
 
-
-
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(builder);
 
-        modelBuilder.Entity<PaymentMethod>()
-            .HasDiscriminator<string>("PaymentType")
+        builder.Entity<PaymentMethod>()
+            .HasDiscriminator<string>("PaymentMethodType")
             .HasValue<PayPal>("PayPal")
             .HasValue<Bizum>("Bizum");
     }
