@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="AppForSEII2526.API.Models.BanReport">
+    <Position X="0.75" Y="1" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAIIAAAAAAAwAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\BanReport.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ReportCustomers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ReportCustomer">
+    <Position X="6.5" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAIAAAAAAABAAAAAAIAAAAAA=</HashCode>
+      <FileName>Models\ReportCustomer.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="BanReport" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.Complaint">
+    <Position X="11" Y="5.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAAAAAAAABAAgAAAgAAAA=</HashCode>
+      <FileName>Models\Complaint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ComplaintType">
+    <Position X="11" Y="3" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAASAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ComplaintType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ApplicationUser">
+    <Position X="5.5" Y="5.25" Width="3" />
+    <AssociationLine Name="ReportCustomers" Type="AppForSEII2526.API.Models.ReportCustomer" FixedFromPoint="true">
+      <Path>
+        <Point X="7.188" Y="5.25" />
+        <Point X="7.188" Y="2.488" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.198" Y="1.68" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Complaints" Type="AppForSEII2526.API.Models.Complaint" FixedFromPoint="true">
+      <Path>
+        <Point X="8.5" Y="6.625" />
+        <Point X="11" Y="6.625" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAQQBAAAAAgCAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ReportCustomers" />
+      <Property Name="Complaints" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Enum Name="AppForSEII2526.API.Models.ReportState">
+    <Position X="10.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Models\ReportState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
