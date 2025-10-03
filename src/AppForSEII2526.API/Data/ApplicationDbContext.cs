@@ -19,4 +19,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
     
+
+    public DbSet<Complaint> Complaints { get; set; }
+
+
 }
