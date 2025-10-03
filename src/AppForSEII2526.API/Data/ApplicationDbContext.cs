@@ -22,5 +22,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<Complaint> Complaints { get; set; }
 
+    public DbSet<Bizum> Bizums { get; set; }
+
 
 }
