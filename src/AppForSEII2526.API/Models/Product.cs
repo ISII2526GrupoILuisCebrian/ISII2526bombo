@@ -24,7 +24,7 @@
         [Range(0, int.MaxValue, ErrorMessage = "Stock cannot be negative.")]
         public int Stock { get; set; }
 
-        public Brand Brand { get; set; }
+        public Brand Branch { get; set; }
 
         public List<PurchaseProduct> PurchaseProducts { get; set; }
     }
