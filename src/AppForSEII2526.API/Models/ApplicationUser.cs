@@ -12,6 +12,11 @@ public class ApplicationUser : IdentityUser
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime AccountCreationDate { get; set; }
 
+// Add profile data for application users by adding properties to the ApplicationUser class
+public class ApplicationUser : IdentityUser {
+    //Relationships
+    public List<Complaint> Complaints { get; set; } // Navigation property to Complaint
+    public List<ReportCustomer> ReportCustomers { get; set; } // Navigation property to ReportCustomer
     [StringLength(200, ErrorMessage = "Address can be neither longer than 200 characters nor shorter than 10.", MinimumLength = 10)]
     public string Address { get; set; }
 
