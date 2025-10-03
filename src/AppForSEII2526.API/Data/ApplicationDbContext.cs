@@ -6,7 +6,12 @@ namespace AppForSEII2526.API.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options) {
 
+
     public DbSet<Brand> Brands { get; set; }
+
+    public DbSet<PurchaseDelivery> PurchaseDeliveries { get; set; }
+    
+
 
     public DbSet<PurchaseProduct> PurchaseProducts { get; set; }
 
@@ -32,6 +37,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -42,5 +48,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasValue<Bizum>("Bizum");
     }
 
+
+
+    public DbSet<DeliveryDriver> DeliveryDrivers { get; set; }
+    public DbSet<DeliveryAssignment> DeliveryAssignments { get; set; }
 
 }
