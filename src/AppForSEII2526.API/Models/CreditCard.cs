@@ -1,7 +1,7 @@
 ﻿using DataType = System.ComponentModel.DataAnnotations.DataType;
 namespace AppForSEII2526.API.Models
 {
-    public class CreditCard
+    public class CreditCard : PaymentMethod
     {
         [StringLength(16, MinimumLength = 13)]
         [DataType(DataType.CreditCard)]

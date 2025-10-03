@@ -32,12 +32,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<PayPal> PayPals { get; set; }
 
 
-    public DbSet<CreditCard> CreditCards { get; set; }
-
-
-
-    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -45,8 +39,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<PaymentMethod>()
             .HasDiscriminator<string>("PaymentMethodType")
             .HasValue<PayPal>("PayPal")
-            .HasValue<Bizum>("Bizum")
-            .HasValue  <CreditCard> ("CreditCard");
+            .HasValue<Bizum>("Bizum");
     }
 
 
