@@ -28,5 +28,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<PayPal> PayPals { get; set; }
 
 
+<<<<<<< HEAD
 
+=======
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+>>>>>>> origin/development
 }
