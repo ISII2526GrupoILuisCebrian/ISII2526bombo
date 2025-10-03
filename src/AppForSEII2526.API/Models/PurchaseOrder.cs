@@ -10,7 +10,7 @@
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         [Display(Name = "Date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime Date { get; set; }
 
 
         [StringLength(200, ErrorMessage = "Description cannot exceed 200 characters.")]
