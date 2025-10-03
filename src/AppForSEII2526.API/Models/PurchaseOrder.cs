@@ -38,7 +38,10 @@
 
         public PurchaseState PurchaseState { get; set; }
 
-        public List<PurchaseProduct> PurchaseProducts { get; set; }
+        //Relations
+        public List<PurchaseProduct> PurchaseProducts { get; set; } // 1 to N with PurchaseProduct
+
+        public PaymentMethod PaymentMethod { get; set; } // 1 to 1 with PaymentMethod
 
     }
 }
