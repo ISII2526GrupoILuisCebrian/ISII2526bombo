@@ -17,6 +17,8 @@
         [StringLength(200, ErrorMessage = "Description cannot exceed 200 characters.")]
         public string? Description { get; set; }
 
+        public PurchaseDelivery DriverAssigned { get; set; }
+
         [StringLength(150, ErrorMessage = "Name and surname cannot exceed 150 characters.")]
         public string NameSurname { get; set; }
 
@@ -34,7 +36,13 @@
 
         public IList<PurchaseDelivery> PurchaseDeliveries { get; set; }
 
-        public PurchaseState PurchaseState { get; set; }
+        //Relations
+        public List<PurchaseProduct> PurchaseProducts { get; set; } // 1 to N with PurchaseProduct
 
+        public PaymentMethod PaymentMethod { get; set; } // 1 to 1 with PaymentMethod
+
+        public PurchaseState State { get; set; } // 1 to 1 with PurchaseState
+
+        public ApplicationUser Customer { get; set; } // N to 1 with Customer
     }
 }
