@@ -2,6 +2,7 @@
 {
     public class PurchaseOrder
     {
+   
         public int Id { get; set; }
 
 
@@ -17,7 +18,7 @@
         [StringLength(200, ErrorMessage = "Description cannot exceed 200 characters.")]
         public string? Description { get; set; }
 
-        public PurchaseDelivery DriverAssigned { get; set; }
+        
 
         [StringLength(150, ErrorMessage = "Name and surname cannot exceed 150 characters.")]
         public string NameSurname { get; set; }
@@ -34,9 +35,10 @@
         [Precision(10, 2)]
         public decimal TotalPrice { get; set; }
 
-        public IList<PurchaseDelivery> PurchaseDeliveries { get; set; }
 
         //Relations
+        public PurchaseDelivery? DriverAssigned { get; set; }
+
         public List<PurchaseProduct> PurchaseProducts { get; set; } // 1 to N with PurchaseProduct
 
         public PaymentMethod PaymentMethod { get; set; } // 1 to 1 with PaymentMethod
