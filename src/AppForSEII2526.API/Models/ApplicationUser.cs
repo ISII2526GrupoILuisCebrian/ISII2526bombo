@@ -17,7 +17,7 @@ public class ApplicationUser : IdentityUser
 
     [StringLength(50, ErrorMessage = "Name can be neither longer than 50 characters nor shorter than 10.", MinimumLength = 10)]
     [Key]
-    public string Name { get; set; }
+    public string Name { get; set; } // HOW IS THE 'REQUIRED, NOT NULL' THING WORL HERE
 
     [StringLength(50, ErrorMessage = "Surname can be neither longer than 50 characters nor shorter than 10.", MinimumLength = 10)]
     public string Surname { get; set; }
