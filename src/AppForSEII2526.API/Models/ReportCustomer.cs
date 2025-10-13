@@ -6,7 +6,7 @@
     {
         
         [Range(1, int.MaxValue, ErrorMessage = "CustomerId must be between 1 and 999999")]
-        [Key]
+        
         public string CustomerId { get; set; } // PK
 
         [Range(1, 999999, ErrorMessage = "BanReportId must be between 1 and 999999")]
