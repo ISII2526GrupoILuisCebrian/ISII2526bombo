@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AppForSEII2526.API.DTOs.ProductDTOs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -33,5 +36,19 @@ namespace AppForSEII2526.API.Controllers
         //    return Ok(result);
         //}
 
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(IList<ProductForPurchasingDTO>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetProductsForPurchasing(string? productName)
+        {
+            IList<ProductForPurchasingDTO> productsDTOS = await _context.Products
+                .Include(product=>product.Brand)
+                .Where(product=>product.Name.Contains(productName)
+                    || (productName == null))
+                .OrderBy(product=>product.Name)
+                .Select(product => new ProductForPurchasingDTO(product.Id, product.Name, product.Brand.Name))
+                .ToListAsync();
+            return Ok(productsDTOS);
+        }
     }
 }
