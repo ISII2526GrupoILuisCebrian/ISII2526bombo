@@ -2,11 +2,13 @@
 {
     public class ProductForPurchasingDTO
     {
-        public ProductForPurchasingDTO(int id, string name, string brandName)
+        public ProductForPurchasingDTO(int id, string name, string brandName, int quantity, string location)
         {
             Id = id;
             Name = name;
             Brand = brandName;
+            Quantity = quantity;
+            Location = location;
         }
 
         public int Id { get; set; }
@@ -15,6 +17,11 @@
         public string Name { get; set; }
 
         public string Brand { get; set; }
+
+        [Range(0, 10, ErrorMessage = "The quantity cannot be greater than 10.")]
+        public int Quantity { get; set; }
+
+        public string Location { get; set; }
     }
 }
 
