@@ -73,7 +73,7 @@
                 var result = userManager.CreateAsync(user, "APassword1234%");
                 result.Wait();
 
-                if (result.IsCompletedSuccessfully)
+                if (result.IsCompletedSuccessfully) // ddd
                 {
                     //employee role
                     userManager.AddToRoleAsync(user, roles[1]).Wait();
