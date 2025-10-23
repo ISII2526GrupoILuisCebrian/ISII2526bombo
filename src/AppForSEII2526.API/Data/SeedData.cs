@@ -1,9 +1,8 @@
-﻿
-using AppForSEII2526.API.Models;
 namespace AppForSEII2526.API.Data
 {
-    public class SeedData
+    public static class SeedData
     {
+
         public static void Initialize(ApplicationDbContext dbContext, IServiceProvider serviceProvider, ILogger logger)
         {
             List<string> rolesNames = new List<string> { "Administrator", "Employee", "Customer" };
@@ -53,7 +52,7 @@ namespace AppForSEII2526.API.Data
             //first, it checks the user does not already exist in the DB
             if (userManager.FindByNameAsync("elena@uclm.es").Result == null)
             {
-                ApplicationUser user = new ApplicationUser("1", "Elena", "Navarro Martínez", "elena@uclm.es", "Avda. España 2, Albacete");
+                ApplicationUser user = new ApplicationUser("1", "antony7", new DateTime(2003, 4, 12), "Calle Tejares 40, Albacete", "Antony", "Matheus dos Santos", null, null, null);
                 user.EmailConfirmed = true;
 
                 var result = userManager.CreateAsync(user, "Password1234%");
@@ -68,13 +67,13 @@ namespace AppForSEII2526.API.Data
 
             if (userManager.FindByNameAsync("gregorio@uclm.es").Result == null)
             {
-                ApplicationUser user = new ApplicationUser("2", "Gregorio", "Diaz Descalzo", "gregorio@uclm.es", "Avda. España 25, Ciudad Real");
+                ApplicationUser user = new ApplicationUser("2", "luismi", new DateTime(1999, 6, 24), "Calle Rosario 22, Albacete", "Luis", "Milla", null, null, null);
                 user.EmailConfirmed = true;
 
                 var result = userManager.CreateAsync(user, "APassword1234%");
                 result.Wait();
 
-                if (result.IsCompletedSuccessfully)
+                if (result.IsCompletedSuccessfully) // ddd
                 {
                     //employee role
                     userManager.AddToRoleAsync(user, roles[1]).Wait();
@@ -84,7 +83,7 @@ namespace AppForSEII2526.API.Data
             if (userManager.FindByNameAsync("peter@uclm.es").Result == null)
             {
                 //A customer class has been defined because it has different attributes (purchase, rental, etc.)
-                ApplicationUser user = new ApplicationUser("3", "Peter", "Jackson", "peter@uclm.es", "Avda. España 75, London");
+                ApplicationUser user = new ApplicationUser("3", "isi_palazon", new DateTime(2010, 9, 19), "Calle Oro 15, Albacete", "Isi", "Palazon", null, null, null);
                 user.EmailConfirmed = true;
 
                 var result = userManager.CreateAsync(user, "OtherPass12$");
