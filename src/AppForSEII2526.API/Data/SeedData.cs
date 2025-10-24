@@ -1,4 +1,4 @@
-﻿namespace AppForSEII2526.API.Data
+namespace AppForSEII2526.API.Data
 {
     public static class SeedData
     {
