@@ -43,8 +43,10 @@ namespace AppForSEII2526.API.Controllers
                     p.PostalCode,
                     p.State,
                     p.TotalPrice,
-                    p.NameSurname,
+                    p.Customer.Name,
+                    p.Customer.Surname,
                     p.PaymentMethod,
+                    p.Customer.UserName,
                     p.PurchaseProducts
 
                         .Select(pp => new PurchaseProductDTO(

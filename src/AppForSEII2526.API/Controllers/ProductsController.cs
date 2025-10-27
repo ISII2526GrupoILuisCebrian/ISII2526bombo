@@ -56,8 +56,9 @@ namespace AppForSEII2526.API.Controllers
                     product.Id,
                     product.Name,
                     product.Brand.Name,
-                    product.PurchaseProducts.Sum(pp => pp.Quantity), // total comprado
-                    product.Brand.Location
+                    product.Description,
+                    product.Price,
+                    product.Stock
                   ))
                 .ToListAsync();
             if (!productsDTOS.Any())
