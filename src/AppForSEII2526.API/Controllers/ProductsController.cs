@@ -43,40 +43,22 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(ModelError), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> GetProductsForPurchasing(string? productName, string? colour)
         {
-            if (string.IsNullOrWhiteSpace(productName) && string.IsNullOrWhiteSpace(colour))
-            {
-                _logger.LogWarning($"{DateTime.Now} Warning: No filters were provided for product search.");
-            }
-
-            var productsQuery = _context.Products
-                .Include(p => p.Brand) // incluir marca para poder sacar su nombre
-                .Include(p => p.PurchaseProducts) // incluir compras
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(productName))
-            {
-                productsQuery = productsQuery.Where(p => p.Name.Contains(productName));
-            }
-
-            if (!string.IsNullOrWhiteSpace(colour))
-            {
-                productsQuery = productsQuery.Where(p => p.Colour.Contains(colour));
-            }
 
             IList<ProductForPurchasingDTO> productsDTOS = await _context.Products
-                .Include(product=>product.Brand)
-                .Include(product=>product.PurchaseProducts)
-                .Where(product=>
+                .Include(product => product.Brand)
+                .Include(product => product.PurchaseProducts)
+                .Where(product =>
                  (productName == null || product.Name.Contains(productName)) &&
                  (colour == null || product.Colour.Contains(colour)) &&
                  product.Stock > 0)
-                .OrderBy(product=>product.Name)
+                .OrderBy(product => product.Name)
                  .Select(product => new ProductForPurchasingDTO(
                     product.Id,
                     product.Name,
                     product.Brand.Name,
-                    product.PurchaseProducts.Sum(pp => pp.Quantity), // total comprado
-                    product.Brand.Location
+                    product.Description,
+                    product.Price,
+                    product.Stock
                   ))
                 .ToListAsync();
             if (!productsDTOS.Any())
