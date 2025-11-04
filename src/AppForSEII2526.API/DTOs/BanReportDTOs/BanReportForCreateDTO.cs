@@ -23,5 +23,16 @@ namespace AppForSEII2526.API.DTOs.BanReportDTOs
         public string? Message { get; set; }
 
         public IList<UserForBaningDTO> UsersForBaning { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is BanReportForCreateDTO dTO &&
+                   ReportReason == dTO.ReportReason &&
+                   Description == dTO.Description &&
+                   StartDate == dTO.StartDate &&
+                   EndDate == dTO.EndDate &&
+                   Message == dTO.Message &&
+                   UsersForBaning.SequenceEqual(dTO.UsersForBaning);
+        }
     }
 }
