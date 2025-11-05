@@ -53,13 +53,13 @@ namespace AppForSEII2526.API.Controllers
                     && (user.Complaints.Any(complaint => complaint.Processed == false))
                     ))
                 .OrderBy(user=>user.Name)
-                .Select(user=>new UserForBaningDTO(user.Name, user.Surname, user.AccountCreationDate, 
+                .Select(user=>new UserForBaningDTO(user.Name, user.Surname, user.AccountCreationDate,
                     user.Complaints
-                    .GroupBy(complaint=>complaint.Type.Name).Select(group=>new ComplaintDTO(
+                    .GroupBy(complaint => complaint.Type.Name).Select(group => new ComplaintDTO(
                         group.Key,
                         group.Count()
                     )).ToList()
-                    )) // CAMBIAR
+, TODO)) // CAMBIAR
                     // CAMBIAR
                 .ToListAsync(); 
             return Ok(appUsersDTOS);

@@ -20,8 +20,8 @@ namespace AppForSEII2526.API.DTOs.BanReportDTOs
          */
 
         public BanReportForDetailDTO(int id, string reportReason, string description, DateTime startDate,
-            DateTime endDate, string? message, IList<ApplicationUserDTOs.UserForBaningDTO> usersForBaning)
-            : base(reportReason, description, startDate, endDate, message, usersForBaning)
+            DateTime endDate, IList<ApplicationUserDTOs.UserForBaningDTO> usersForBaning)
+            : base(reportReason, description, startDate, endDate, usersForBaning)
         {
             Id = id;
         }
@@ -34,7 +34,7 @@ namespace AppForSEII2526.API.DTOs.BanReportDTOs
                    Description == dTO.Description &&
                    StartDate == dTO.StartDate &&
                    EndDate == dTO.EndDate &&
-                   Message == dTO.Message &&
+                   
                    UsersForBaning.SequenceEqual(dTO.UsersForBaning) &&
                    Id == dTO.Id;
         }

@@ -32,17 +32,14 @@ namespace AppForSEII2526.API.Controllers
 
                 .Include(br => br.ReportCustomers) // join con ReportCustomer
                    .ThenInclude(rc => rc.Customer) // join con ApplicationUser
-                   .ThenInclude(rc => rc.State) // join con ReportState
+                   //.ThenInclude(rc => rc.State) // join con ReportState
                         .ThenInclude(appUser => appUser.Complaints) // join con Complaint
 
-                .Select(br => new BanReportForDetailDTO(br.Id, br.ReportReason, br.Description, br.StartDate, br.EndDate, 
-                    br.ReportCustomer.Message!, // me falta el Name y Surname, que no se como acceder a ellos
-                        //.Select(appUser => new UserForBaningDTO(appUser.Customer.Name, appUser.Customer.Surname)).ToList()
+                .Select(br => new BanReportForDetailDTO(br.Id, br.Reason, br.DetailedDescription, br.StartDate, br.EndDate, 
+                br.ReportCustomers
+                    .Select(rc => new UserForBaningDTO(rc.Customer.Name, rc.Customer.Surname, rc.Customer.AccountCreationDate, new List<ComplaintDTO>(), rc.Message)).ToList()
 
-
-                )
-
-
+                )).FirstOrDefaultAsync();
 
             return Ok(report);
         }
