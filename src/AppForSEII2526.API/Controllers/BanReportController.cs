@@ -41,7 +41,13 @@ namespace AppForSEII2526.API.Controllers
 
                 )).FirstOrDefaultAsync();
 
-            return Ok(report);
+            if(report == null)
+            {
+                _logger.LogError($"Error: Report with id {id} does not exist");
+                return NotFound();
+            }
+
+                return Ok(report);
         }
     }
 }
