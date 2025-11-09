@@ -42,6 +42,7 @@ namespace AppForSEII2526.API.Controllers
         {
             IList<UserForBaningDTO> appUsersDTOS = await _context.Users
                 .Include(user => user.Complaints)
+                .Include(user => user.ReportCustomers)
                 .Where(user => (
                     ((userSurname == null) || (user.Name.Contains(userSurname)))
                    //tipo complaint
@@ -59,7 +60,8 @@ namespace AppForSEII2526.API.Controllers
                         group.Key,
                         group.Count()
                     )).ToList()
-, TODO)) // CAMBIAR
+                , user.ReportCustomers
+                        .Select(rc => rc.Message).FirstOrDefault())) // CAMBIAR
                     // CAMBIAR
                 .ToListAsync(); 
             return Ok(appUsersDTOS);
