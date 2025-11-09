@@ -14,16 +14,16 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
             PaymentMethod paymentMethod,
             string userNameCustomer,
             IList<PurchaseProductDTO> purchaseProducts)
-            {
-                Street = street;
-                PostalCode = postalCode;
-                NameCustomer = nameCustomer;
-                SurnameCustomer = surnameCustomer;
-                PurchaseDate = purchaseDate;
-                PaymentMethod = paymentMethod;
-                UserNameCustomer = userNameCustomer;
-                PurchaseProducts = purchaseProducts;
-            }
+        {
+            Street = street;
+            PostalCode = postalCode;
+            NameCustomer = nameCustomer;
+            SurnameCustomer = surnameCustomer;
+            PurchaseDate = purchaseDate;
+            PaymentMethod = paymentMethod;
+            UserNameCustomer = userNameCustomer;
+            PurchaseProducts = purchaseProducts;
+        }
 
         [StringLength(100, MinimumLength = 10, ErrorMessage = "Street must have at least 10 characters")]
         public string Street { get; set; }

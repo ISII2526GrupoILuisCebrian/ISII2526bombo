@@ -59,7 +59,7 @@ namespace AppForSEII2526.API.Controllers
                         )).ToList())
                 )
 
-                
+
              //it obtains just the first Purchase that satisfies the where clause
              .FirstOrDefaultAsync();
 
@@ -76,3 +76,4 @@ namespace AppForSEII2526.API.Controllers
         }
     }
 }
+

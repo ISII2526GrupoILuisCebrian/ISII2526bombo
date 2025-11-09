@@ -3,7 +3,7 @@ namespace AppForSEII2526.API.DTOs.ProductDTOs
 {
     public class ProductForPurchasingDTO
     {
-        public ProductForPurchasingDTO(int id, string name, string brandName,string description, decimal purchasePrice, int quantity)
+        public ProductForPurchasingDTO(int id, string name, string brandName, string description, decimal purchasePrice, int quantity)
         {
             Id = id;
             Name = name;
@@ -31,9 +31,11 @@ namespace AppForSEII2526.API.DTOs.ProductDTOs
         [Range(0, int.MaxValue, ErrorMessage = "Quantity available must be 0 or more.")]
         public int Quantity { get; set; }
 
-        
+
 
     }
 }
+
+
 
 
