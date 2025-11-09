@@ -32,7 +32,7 @@ namespace AppForSEII2526.API.Controllers
 
                 .Include(br => br.ReportCustomers) // join con ReportCustomer
                    .ThenInclude(rc => rc.Customer) // join con ApplicationUser
-                   //.ThenInclude(rc => rc.State) // join con ReportState
+                   
                         .ThenInclude(appUser => appUser.Complaints) // join con Complaint
 
                 .Select(br => new BanReportForDetailDTO(br.Id, br.Reason, br.DetailedDescription, br.StartDate, br.EndDate, 
