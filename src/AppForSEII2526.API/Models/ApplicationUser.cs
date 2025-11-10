@@ -10,6 +10,19 @@ public class ApplicationUser : IdentityUser
     public ApplicationUser(){
     }
 
+    public ApplicationUser(string userName, DateTime accountCreationDate, string address, string name, string surname, IList<Complaint> complaints, IList<ReportCustomer> reportCustomers, IList<PurchaseOrder> purchaseOrders)
+    {
+        
+        UserName = userName;
+        AccountCreationDate = accountCreationDate;
+        Address = address;
+        Name = name;
+        Surname = surname;
+        Complaints = complaints;
+        ReportCustomers = reportCustomers;
+        PurchaseOrders = purchaseOrders;
+    }
+
     public ApplicationUser(string id, string userName, DateTime accountCreationDate, string address, string name, string surname, IList<Complaint> complaints, IList<ReportCustomer> reportCustomers, IList<PurchaseOrder> purchaseOrders)
     {
         Id = id;
