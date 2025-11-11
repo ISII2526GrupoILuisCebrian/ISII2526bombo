@@ -50,9 +50,9 @@ namespace AppForSEII2526.API.Data
         public static void SeedUsers(UserManager<ApplicationUser> userManager, List<string> roles)
         {
             //first, it checks the user does not already exist in the DB
-            if (userManager.FindByNameAsync("elena@uclm.es").Result == null)
+            if (userManager.FindByNameAsync("antonydetriana@gmail.es").Result == null)
             {
-                ApplicationUser user = new ApplicationUser("1", "antony7", new DateTime(2003, 4, 12), "Calle Tejares 40, Albacete", "Antony", "Matheus dos Santos", null, null, null);
+                ApplicationUser user = new ApplicationUser("antonydetriana@gmail.es", new DateTime(2003, 4, 12), "Calle Tejares 40, Albacete", "Antony", "Matheus dos Santos", null, null, null);
                 user.EmailConfirmed = true;
 
                 var result = userManager.CreateAsync(user, "Password1234%");
@@ -65,9 +65,9 @@ namespace AppForSEII2526.API.Data
                 }
             }
 
-            if (userManager.FindByNameAsync("gregorio@uclm.es").Result == null)
+            if (userManager.FindByNameAsync("luis.milla@gmail.es").Result == null)
             {
-                ApplicationUser user = new ApplicationUser("2", "luismi", new DateTime(1999, 6, 24), "Calle Rosario 22, Albacete", "Luis", "Milla", null, null, null);
+                ApplicationUser user = new ApplicationUser("luis.milla@gmail.es", new DateTime(1999, 6, 24), "Calle Rosario 22, Albacete", "Luis", "Milla", null, null, null);
                 user.EmailConfirmed = true;
 
                 var result = userManager.CreateAsync(user, "APassword1234%");
@@ -80,10 +80,10 @@ namespace AppForSEII2526.API.Data
                 }
             }
 
-            if (userManager.FindByNameAsync("peter@uclm.es").Result == null)
+            if (userManager.FindByNameAsync("isi_palazon@yahoo.es").Result == null)
             {
                 //A customer class has been defined because it has different attributes (purchase, rental, etc.)
-                ApplicationUser user = new ApplicationUser("3", "isi_palazon", new DateTime(2010, 9, 19), "Calle Oro 15, Albacete", "Isi", "Palazon", null, null, null);
+                ApplicationUser user = new ApplicationUser("isi_palazon@yahoo.es", new DateTime(2010, 9, 19), "Calle Oro 15, Albacete", "Isi", "Palazon", null, null, null);
                 user.EmailConfirmed = true;
 
                 var result = userManager.CreateAsync(user, "OtherPass12$");

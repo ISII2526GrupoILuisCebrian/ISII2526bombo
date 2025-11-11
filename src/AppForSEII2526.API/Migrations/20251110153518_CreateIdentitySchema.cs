@@ -60,7 +60,7 @@ namespace AppForSEII2526.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DetailedDesciption = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    DetailedDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -474,9 +474,9 @@ namespace AppForSEII2526.API.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BanReports_DetailedDesciption",
+                name: "IX_BanReports_DetailedDescription",
                 table: "BanReports",
-                column: "DetailedDesciption",
+                column: "DetailedDescription",
                 unique: true);
 
             migrationBuilder.CreateIndex(

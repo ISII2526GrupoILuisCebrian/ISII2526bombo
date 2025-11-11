@@ -17,7 +17,7 @@
 
         
 
-        //Relationships
+        //Relationships  
         public BanReport BanReport { get; set; } // Navigation property to BanReport
         public ReportState State { get; set; } // Enum: InProgress, Rejected
 
