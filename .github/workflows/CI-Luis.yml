@@ -6,15 +6,15 @@ name: Continous Integration fired when a push is done to development
 on:
 #  push:
 #    branches: 
-      - luisCebsoo-CI-CD
+#      - luisCebsoo-CI-CD
 # for considering only those changes affecting to a specific folder
 #    paths:
 #      - 'src/AppForSEII2526.API**'
-pull_request:
+ pull_request:
     branches: 
        - development
 
-workflow_dispatch:
+#workflow_dispatch:
 
 jobs:
   build:
@@ -33,17 +33,17 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4        
         with:
-          dotnet-version: 8.0
+          dotnet-version: '8.x'
 
       - name: Restore dependencies        
-          run: |  
+        run: |  
           dotnet restore ${{ env.API }} 
           dotnet restore ${{ env.WEB }}  
           dotnet restore ${{ env.UT }}  
           dotnet restore ${{ env.UIT }}  
     
       - name: Build the solution
-          run: |
+        run: |
           dotnet build ${{ env.API }}  --configuration Release --no-restore
           dotnet build ${{ env.WEB }}  --configuration Release --no-restore
           dotnet build ${{ env.UT }}  --configuration Release --no-restore
@@ -52,8 +52,8 @@ jobs:
       - name: Run unit tests with report
         run: dotnet test ${{ env.UT }} --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
         
-     - name: Upload test results
-       uses: actions/upload-artifact@v4
-       with:
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
           name: TestResults
           path: ./test/AppForSEII2526.UT/TestResults/TestResults.trx
