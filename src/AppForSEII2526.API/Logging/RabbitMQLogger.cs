@@ -1,7 +1,8 @@
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
 
 namespace AppForSEII2526.Logging;
 
@@ -32,9 +33,13 @@ public class RabbitMQLogger : ILogger, IDisposable
         _channel = _connection.CreateModel();
 
         _channel.ExchangeDeclare(
-       exchange: _config.Exchange,
-       type: _config.ExchangeType,
-       durable: _config.Durable);
+            exchange: _config.Exchange,
+            type: _config.ExchangeType,
+            durable: _config.Durable);
+
+        _properties = _channel.CreateBasicProperties();
+        _properties.Persistent = true;
+        _properties.ContentType = "application/json";
     }
 
     private static void ValidateConfiguration(RabbitMQLoggerConfiguration config)
@@ -80,11 +85,23 @@ public class RabbitMQLogger : ILogger, IDisposable
                 Exception = exception?.ToString()
             };
 
+            var json = JsonConvert.SerializeObject(logEntry);
+            var body = Encoding.UTF8.GetBytes(json);
+
+            _channel.BasicPublish(
+                exchange: _config.Exchange,
+                routingKey: "",
+                basicProperties: _properties,
+                body: body
+            );
+
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Error publishing log message to RabbitMQ: {ex.Message}");
         }
+
+
     }
 
     public void Dispose()

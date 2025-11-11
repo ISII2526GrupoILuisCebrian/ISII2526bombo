@@ -8,7 +8,7 @@ public class RabbitMQLoggerProvider : ILoggerProvider
 {
     private readonly RabbitMQLoggerConfiguration _config;
     private readonly Dictionary<string, RabbitMQLogger> _loggers = new();
-    //private readonly Lock _lock = new Lock();
+    private readonly object _lock = new();
 
     public RabbitMQLoggerProvider(IOptions<RabbitMQLoggerConfiguration> config)
     {
@@ -17,7 +17,7 @@ public class RabbitMQLoggerProvider : ILoggerProvider
 
     public ILogger CreateLogger(string categoryName)
     {
-        //lock (_lock)
+        lock (_lock)
         {
             if (!_loggers.TryGetValue(categoryName, out var logger))
             {

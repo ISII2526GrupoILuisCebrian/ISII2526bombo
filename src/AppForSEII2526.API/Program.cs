@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
-//using TodoApi.Logging;
+using AppForSEII2526.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,7 +51,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
 
 
 //--------------------
-//builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ")); // Sistemas Distribuidos
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ")); // Sistemas Distribuidos
 //”RabbitMQ” coincide con el nombre del bloque de propiedades en appsettings.json
 //--------------------
 
