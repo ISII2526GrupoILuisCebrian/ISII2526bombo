@@ -19,6 +19,9 @@ namespace AppForSEII2526.API.Controllers
         {
             _context = context;
             _logger = logger;
+
+            // Practica 3 SSDD: uso del logger para registrar la inicialización del servicio:
+            _logger.LogInformation("BanReportController initialized");
         }
 
         [HttpGet]
@@ -27,6 +30,8 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetBanReport(int id)
         {
+            _logger.LogDebug($"Debug: Attempting to retrieve report with id {id}");
+
             BanReportForDetailDTO? report = await _context.BanReports
                 .Where(br => br.Id == id)
 
@@ -43,11 +48,14 @@ namespace AppForSEII2526.API.Controllers
 
             if(report == null)
             {
-                _logger.LogError($"Error: Report with id {id} does not exist");
+                _logger.LogError($"Error: Report with id {id} does not exist");                
                 return NotFound();
             }
 
-                return Ok(report);
+            _logger.LogInformation($"Information: Report with id {id} successfully retrieved");
+
+
+            return Ok(report);
         }
     }
 }

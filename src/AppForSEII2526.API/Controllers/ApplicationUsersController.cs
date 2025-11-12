@@ -15,6 +15,9 @@ namespace AppForSEII2526.API.Controllers
         {
             _context = context;
             _logger = logger;
+
+            // Practica 3 SSDD: uso del logger para registrar la inicialización del servicio:
+            _logger.LogInformation("ApplicationUsersController initialized");
         }
 
         /*
