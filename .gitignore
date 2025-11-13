@@ -416,3 +416,5 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+/src/AppForSEII2526.API/appsettings.json
+/src/AppForSEII2526.API/AppForSEII2526.API.csproj
