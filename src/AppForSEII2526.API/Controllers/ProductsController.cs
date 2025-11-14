@@ -43,7 +43,6 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(ModelError), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> GetProductsForPurchasing(string? productName, string? colour)
         {
-
             if (string.IsNullOrWhiteSpace(productName) && string.IsNullOrWhiteSpace(colour))
             {
                 _logger.LogWarning($"{DateTime.Now} Warning: No filters were provided for product search.");
