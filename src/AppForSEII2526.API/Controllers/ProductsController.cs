@@ -55,12 +55,12 @@ namespace AppForSEII2526.API.Controllers
 
             if (!string.IsNullOrWhiteSpace(productName))
             {
-                productsQuery = productsQuery.Where(p => p.Name.Contains(productName));
+                productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(productName.ToLower()));
             }
 
             if (!string.IsNullOrWhiteSpace(colour))
             {
-                productsQuery = productsQuery.Where(p => p.Colour.Contains(colour));
+                productsQuery = productsQuery.Where(p => p.Colour.ToLower().Contains(colour.ToLower()));
             }
 
             IList<ProductForPurchasingDTO> productsDTOS = await _context.Products

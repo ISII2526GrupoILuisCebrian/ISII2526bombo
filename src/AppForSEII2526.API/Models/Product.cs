@@ -3,6 +3,32 @@
     [Index(nameof(Name), IsUnique = true)]
     public class Product
     {
+        public Product()
+        {
+
+        }
+        public Product(
+            int id,
+            string name,
+            string? description,
+            decimal price,
+            string colour,
+            bool isReturnable,
+            int stock,
+            Brand brand
+)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            Price = price;
+            Colour = colour;
+            IsReturnable = isReturnable;
+            Stock = stock;
+            Brand = brand;
+            PurchaseProducts = new List<PurchaseProduct>();
+        }
+
         public int Id { get; set; }
 
         [StringLength(50, ErrorMessage = "Name can be neither longer than 50 characters nor shorter than 10. ", MinimumLength =10)]
