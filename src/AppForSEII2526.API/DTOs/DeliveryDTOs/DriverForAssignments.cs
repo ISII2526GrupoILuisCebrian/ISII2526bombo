@@ -1,4 +1,4 @@
-﻿namespace AppForSEII2526.API.DTOs.DeliveryDTOs
+namespace AppForSEII2526.API.DTOs.DeliveryDTOs
 {
     public class DriverForAssignmentDTO
     {
