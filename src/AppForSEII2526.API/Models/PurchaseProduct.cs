@@ -1,9 +1,10 @@
-﻿namespace AppForSEII2526.API.Models
+﻿    namespace AppForSEII2526.API.Models
 {
     [PrimaryKey(nameof(ProductId), nameof(PurchaseOrderId))]
     public class PurchaseProduct
     {
-        
+       
+
         [Precision(7, 2)]
         public decimal Price { get; set; }
 
@@ -20,8 +21,5 @@
         [Range(1, 10, ErrorMessage = "Quantity must be between 1 and 10")]
         public int Quantity { get; set; }
 
-       
-
-        
     }
 }

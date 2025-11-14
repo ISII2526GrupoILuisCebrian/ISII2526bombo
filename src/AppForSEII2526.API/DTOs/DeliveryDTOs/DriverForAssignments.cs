@@ -2,6 +2,8 @@
 {
     public class DriverForAssignmentDTO
     {
+        private bool available;
+
         public DriverForAssignmentDTO(int id, string name, bool available)
         {
             Id = id;
