@@ -1,14 +1,12 @@
-﻿namespace AppForSEII2526.API.DTOs.DeliveryDTOs
+namespace AppForSEII2526.API.DTOs.DeliveryDTOs
 {
     public class DriverForAssignmentDTO
     {
-        private bool available;
         public DriverForAssignmentDTO(int id, string name, bool available)
         {
             Id = id;
             Name = name;
             Available = available;
-            this.available = available;
         }
 
         public int Id { get; set; }
