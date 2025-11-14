@@ -15,6 +15,9 @@ namespace AppForSEII2526.API.Controllers
         {
             _context = context;
             _logger = logger;
+
+            // Practica 3 SSDD: uso del logger para registrar la inicialización del servicio:
+            _logger.LogInformation("ApplicationUsersController initialized");
         }
 
         /*
@@ -42,6 +45,7 @@ namespace AppForSEII2526.API.Controllers
         {
             IList<UserForBaningDTO> appUsersDTOS = await _context.Users
                 .Include(user => user.Complaints)
+                .Include(user => user.ReportCustomers)
                 .Where(user => (
                     ((userSurname == null) || (user.Name.Contains(userSurname)))
                    //tipo complaint
@@ -53,13 +57,14 @@ namespace AppForSEII2526.API.Controllers
                     && (user.Complaints.Any(complaint => complaint.Processed == false))
                     ))
                 .OrderBy(user=>user.Name)
-                .Select(user=>new UserForBaningDTO(user.Name, user.Surname, user.AccountCreationDate, 
+                .Select(user=>new UserForBaningDTO(user.Name, user.Surname, user.AccountCreationDate,
                     user.Complaints
-                    .GroupBy(complaint=>complaint.Type.Name).Select(group=>new ComplaintDTO(
+                    .GroupBy(complaint => complaint.Type.Name).Select(group => new ComplaintDTO(
                         group.Key,
                         group.Count()
                     )).ToList()
-                    )) // CAMBIAR
+                , user.ReportCustomers
+                        .Select(rc => rc.Message).FirstOrDefault())) // CAMBIAR
                     // CAMBIAR
                 .ToListAsync(); 
             return Ok(appUsersDTOS);

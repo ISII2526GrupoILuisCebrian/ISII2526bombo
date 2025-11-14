@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using AppForSEII2526.API.DTOs.PurchaseDTOs;
 
 namespace AppForSEII2526.API.DTOs.PurchaseOrderDTOs
@@ -22,12 +23,39 @@ namespace AppForSEII2526.API.DTOs.PurchaseOrderDTOs
         public PurchaseForDetailDTO(int id, decimal totalPrice, DateTime date, string street, string city, string postalCode, string nameSurname, string state, string paymentMethod, string customerUserName, IList<PurchaseProductDTO> items, int? rating) : this(id, totalPrice, date, street, city, postalCode, nameSurname, state, paymentMethod, customerUserName, items)
         {
             Rating = rating;
+=======
+﻿using AppForSEII2526.API.Models;
+
+namespace AppForSEII2526.API.DTOs.PurchaseDTOs
+{
+    public class PurchaseForDetailDTO : PurchaseForCreateDTO
+    {
+        public PurchaseForDetailDTO(
+            int id,
+            DateTime purchaseDate,
+            string street,
+            string postalCode,
+            PurchaseState state,
+            decimal totalPrice,
+            string nameCustomer,
+            string surnameCustomer,
+            PaymentMethod paymentMethod,
+            string userNameCustomer,
+            IList<PurchaseProductDTO> purchaseProducts)
+
+            : base(street, postalCode, nameCustomer, surnameCustomer, purchaseDate, paymentMethod, userNameCustomer, purchaseProducts)
+        {
+            Id = id;
+            TotalPrice = totalPrice;
+
+>>>>>>> origin/development
         }
 
         public int Id { get; set; }
 
         [Precision(10, 2)]
         public decimal TotalPrice { get; set; }
+<<<<<<< HEAD
         public DateTime Date { get; set; }
 
         public string Street { get; set; } = default!;
@@ -62,3 +90,12 @@ namespace AppForSEII2526.API.DTOs.PurchaseOrderDTOs
         }
     }
 }
+=======
+
+        public DateTime PurchaseDate { get; set; }
+
+
+
+    }
+}
+>>>>>>> origin/development
