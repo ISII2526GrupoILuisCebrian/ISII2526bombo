@@ -1,6 +1,8 @@
 ﻿using AppForSEII2526.API.DTOs.DeliveryDriverDTOs;
+using AppForSEII2526.API.DTOs.DeliveryDTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -71,6 +73,52 @@ namespace AppForSEII2526.API.Controllers
             }
 
             return Ok(orders);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(SchedulingDetailsDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult> GetSchedulingDetails([FromQuery] List<int> orderIds)
+        {
+            // alt flor 3: check if list is empty
+            if (orderIds == null || !orderIds.Any())
+            {
+                return BadRequest("No purchase orders selected for scheduling.");
+            }
+
+            // put into dto
+            var selectedOrders = await _context.PurchaseOrders
+                .Where(o => orderIds.Contains(o.Id))
+                .Select(o => new OrderForSchedulingDTO(
+                    o.Id,
+                    o.Street,
+                    o.City,
+                    o.PostalCode,
+                    o.Date,
+                    o.TotalPrice,
+                    o.NameSurname))
+                .ToListAsync();
+
+            // show all orderds that were not found
+            if (selectedOrders.Count != orderIds.Count)
+            {
+                var missingIds = orderIds.Except(selectedOrders.Select(o => o.Id)).ToList();
+                return NotFound($"The following order IDs were not found: {string.Join(", ", missingIds)}");
+            }
+
+            // get available drivers
+            var availableDrivers = await _context.DeliveryDrivers
+                .Select(dd => new DriverForAssignmentDTO(
+                    dd.Id,
+                    dd.Name, 
+                    dd.Available))
+                .ToListAsync();
+
+            var detailsDTO = new SchedulingDetailsDTO(selectedOrders, availableDrivers);
+
+            return Ok(detailsDTO);
         }
     }
 }
