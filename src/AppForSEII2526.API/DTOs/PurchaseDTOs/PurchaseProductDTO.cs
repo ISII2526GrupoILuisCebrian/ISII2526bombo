@@ -7,36 +7,51 @@ public class PurchaseProductDTO
         int productId,
         string productName,
         string brandName,
+        string? colour,
         int quantity,
-        decimal price,
-        string? description)
+        decimal unitPrice)
+
     {
         ProductId = productId;
         ProductName = productName;
         BrandName = brandName;
+        Colour = colour;
         Quantity = quantity;
-        Price = price;
-        Description = description;
+        UnitPrice = unitPrice;
     }
 
     public int ProductId { get; set; }
 
-    [StringLength(50)]
+
+    [Required, StringLength(100, MinimumLength = 3)]
     public string ProductName { get; set; }
 
-    [StringLength(50)]
+    [Required, StringLength(100)]
     public string BrandName { get; set; }
+
+    [StringLength(30)]
+    public string? Colour { get; set; }
 
     [Range(1, 100)]
     public int Quantity { get; set; }
 
     [DataType(DataType.Currency)]
     [Precision(10, 2)]
-    public decimal Price { get; set; }
 
-    public string? Description { get; set; }
+    public decimal UnitPrice { get; set; }
 
+    public override bool Equals(object? obj)
+    {
+        return obj is PurchaseProductDTO dTO &&
+               ProductId == dTO.ProductId &&
+               ProductName == dTO.ProductName &&
+               BrandName == dTO.BrandName &&
+               Colour == dTO.Colour &&
+               UnitPrice == dTO.UnitPrice &&
+               Quantity == dTO.Quantity;
+    }
 
+    
 }
 
 
