@@ -1,5 +1,6 @@
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
+using AppForSEII2526.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,13 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+//--------------------
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ")); // Sistemas Distribuidos
+//”RabbitMQ” coincide con el nombre del bloque de propiedades en appsettings.json
+//--------------------
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
@@ -90,7 +98,7 @@ using (var scope = app.Services.CreateScope()) {
 
 
         //it sees the database
-        //SeedData.Initialize(db, scope.ServiceProvider, logger);
+        SeedData.Initialize(db, scope.ServiceProvider, logger);
     }
     catch (Exception ex) {
         logger.LogError(ex, "An error occurred seeding the DB.");

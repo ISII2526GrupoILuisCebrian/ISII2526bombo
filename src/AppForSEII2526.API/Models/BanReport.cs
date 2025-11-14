@@ -1,10 +1,10 @@
 ﻿namespace AppForSEII2526.API.Models
 {
-    [Index(nameof(DetailedDesciption), IsUnique = true)]
+    [Index(nameof(DetailedDescription), IsUnique = true)]
     public class BanReport
     {
         [StringLength(1000, ErrorMessage = "Detailed Desciption can be neither longer than 1000 characters nor shorter than 10.", MinimumLength=10)]
-        public string DetailedDesciption { get; set; }
+        public string DetailedDescription { get; set; }
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date), Display(Name = "End Date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
