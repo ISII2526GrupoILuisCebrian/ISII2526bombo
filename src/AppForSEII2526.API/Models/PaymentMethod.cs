@@ -6,5 +6,11 @@
 
         //Relations
         public ApplicationUser User { get; set; } // 1 to 1 with ApplicationUser
+        public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
+
+
+        public PaymentMethod()
+        {
+        }
     }
 }
