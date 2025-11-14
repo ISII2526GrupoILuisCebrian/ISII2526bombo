@@ -71,18 +71,6 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
                    Rating == dTO.Rating;
         }
 
-        public IList<PurchaseProductDTO> PurchaseProducts { get; set; }
-
-        [Required]
-        public DateTime PurchaseDate { get; set; }
-
-        [Required]
-        public PaymentMethod PaymentMethod { get; set; }
-
-        [EmailAddress]
-        [Required]
-        public string UserNameCustomer { get; set; }
-
     }
 }
 
