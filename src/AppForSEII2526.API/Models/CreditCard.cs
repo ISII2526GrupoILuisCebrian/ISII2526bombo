@@ -3,7 +3,7 @@ namespace AppForSEII2526.API.Models
 {
     public class CreditCard : PaymentMethod
     {
-        [StringLength(16, MinimumLength = 13)]
+        [StringLength(20, MinimumLength = 13)]
         [DataType(DataType.CreditCard)]
         [Display(Name = "Credit Card Number")]
         public string CreditCardNumber { get; set; }
