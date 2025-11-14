@@ -1,9 +1,9 @@
-<<<<<<< HEAD
+
 ﻿using AppForSEII2526.API.Models;
 using System.ComponentModel.DataAnnotations;
-=======
+
 ﻿using System.ComponentModel.DataAnnotations;
->>>>>>> origin/development
+
 using DataType = System.ComponentModel.DataAnnotations.DataType;
 
 namespace AppForSEII2526.API.DTOs.PurchaseDTOs
@@ -12,7 +12,6 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
     {
         public PurchaseForCreateDTO(
             string street,
-<<<<<<< HEAD
             string city,
             string postalCode,
             string nameCustomer,
@@ -28,35 +27,17 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
             SurnameCustomer = surnameCustomer;
             PaymentMethodId = paymentMethodId;
             PurchasedProducts = purchasedProducts;
-=======
-            string postalCode,
-            string nameCustomer,
-            string surnameCustomer,
-            DateTime purchaseDate,
-            PaymentMethod paymentMethod,
-            string userNameCustomer,
-            IList<PurchaseProductDTO> purchaseProducts)
-        {
-            Street = street;
-            PostalCode = postalCode;
-            NameCustomer = nameCustomer;
-            SurnameCustomer = surnameCustomer;
-            PurchaseDate = purchaseDate;
-            PaymentMethod = paymentMethod;
-            UserNameCustomer = userNameCustomer;
-            PurchaseProducts = purchaseProducts;
->>>>>>> origin/development
+
+            
         }
 
         [StringLength(100, MinimumLength = 10, ErrorMessage = "Street must have at least 10 characters")]
         public string Street { get; set; }
 
-<<<<<<< HEAD
         [StringLength(100, MinimumLength = 2, ErrorMessage = "City must have at least 3 characters")]
         public string City { get; set; }
 
-=======
->>>>>>> origin/development
+
         [StringLength(10, MinimumLength = 4, ErrorMessage = "Postal code must have between 4 and 10 characters")]
         public string PostalCode { get; set; }
 
@@ -67,7 +48,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         public string SurnameCustomer { get; set; }
 
         [Required]
-<<<<<<< HEAD
+
         public IList<PurchaseProductDTO> PurchasedProducts { get; set; }
 
         [Required]
@@ -89,7 +70,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
                    PaymentMethodId == dTO.PaymentMethodId &&
                    Rating == dTO.Rating;
         }
-=======
+
         public IList<PurchaseProductDTO> PurchaseProducts { get; set; }
 
         [Required]
@@ -101,7 +82,6 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         [EmailAddress]
         [Required]
         public string UserNameCustomer { get; set; }
->>>>>>> origin/development
 
     }
 }

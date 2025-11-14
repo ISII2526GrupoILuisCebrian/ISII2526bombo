@@ -1,36 +1,30 @@
 ﻿using AppForSEII2526.API.DTOs.PurchaseDTOs;
-<<<<<<< HEAD
+
 using AppForSEII2526.API.DTOs.PurchaseOrderDTOs;
-=======
->>>>>>> origin/development
+
+
 using AppForSEII2526.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-<<<<<<< HEAD
+
 using System.Linq;
-=======
->>>>>>> origin/development
+
+
 
 namespace AppForSEII2526.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-<<<<<<< HEAD
-    public class PurchasesController : ControllerBase
-    {
-        private ApplicationDbContext _context;
-        private ILogger<PurchasesController> _logger;
 
-        public PurchasesController(ApplicationDbContext context, ILogger<PurchasesController> logger)
-=======
+   
     public class PurchaseController : ControllerBase
     {
         private ApplicationDbContext _context;
         private ILogger<PurchaseController> _logger;
 
         public PurchaseController(ApplicationDbContext context, ILogger<PurchaseController> logger)
->>>>>>> origin/development
+
         {
             _context = context;
             _logger = logger;
@@ -42,7 +36,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetPurchase(int id)
         {
-<<<<<<< HEAD
+
             var purchase = await _context.PurchaseOrders
                 .Where(po => po.Id == id)
 
@@ -76,55 +70,16 @@ namespace AppForSEII2526.API.Controllers
                         )).ToList()
                 ))
                 .FirstOrDefaultAsync();
-=======
-
-            //perhaps it does not exist a Purchase with the id provided
-            PurchaseForDetailDTO? purchase = await _context.PurchaseOrders
-                .Where(p => p.Id == id)
-
-                .Include(p => p.PurchaseProducts) //join table PurchaseProducts
-                    .ThenInclude(pp => pp.Product) //then join table Products
-                        .ThenInclude(product => product.Brand) //then join table Brand
-
-                .Include(p => p.Customer) //join table ApplicationUser
-
-                .Select(p => new PurchaseForDetailDTO(
-                    p.Id,
-                    p.Date,
-                    p.Street,
-                    p.PostalCode,
-                    p.State,
-                    p.TotalPrice,
-                    p.Customer.Name,
-                    p.Customer.Surname,
-                    p.PaymentMethod,
-                    p.Customer.UserName,
-                    p.PurchaseProducts
-
-                        .Select(pp => new PurchaseProductDTO(
-                            pp.Product.Id,
-                            pp.Product.Name,
-                            pp.Product.Brand.Name,
-                            pp.Quantity,
-                            pp.Product.Price,
-                            pp.Product.Description
-                        )).ToList())
-                )
 
 
-             //it obtains just the first Purchase that satisfies the where clause
-             .FirstOrDefaultAsync();
-
-
->>>>>>> origin/development
-
+          
             if (purchase == null)
             {
                 _logger.LogError($"Error: Purchase with id {id} does not exist");
                 return NotFound();
             }
 
-<<<<<<< HEAD
+
             return Ok(purchase);
         }
 
@@ -276,11 +231,5 @@ namespace AppForSEII2526.API.Controllers
 
     }
 
-=======
-
-            return Ok(purchase);
-        }
-    }
->>>>>>> origin/development
 }
 
