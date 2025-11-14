@@ -2,22 +2,15 @@
 {
     public class DriverForAssignmentDTO
     {
-        private bool available;
-
-        public DriverForAssignmentDTO(int id, string name, string? phoneNumber)
-        {
-            Id = id;
-            Name = name;
-        }
-
         public DriverForAssignmentDTO(int id, string name, bool available)
         {
             Id = id;
             Name = name;
-            this.available = available;
+            Available = available;
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool Available { get; set; }
     }
 }
