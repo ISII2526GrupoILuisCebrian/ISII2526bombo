@@ -1,10 +1,9 @@
-﻿using AppForSEII2526.API.Models; // For PriorityType enum
+﻿using AppForSEII2526.API.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppForSEII2526.API.DTOs.DeliveryDTOs
 {
-    // Nested DTO for specific order priority input
     public class OrderPriorityDTO
     {
         [Required]
@@ -12,9 +11,15 @@ namespace AppForSEII2526.API.DTOs.DeliveryDTOs
 
         [Required]
         public PriorityType Priority { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is OrderPriorityDTO dto &&
+                   PurchaseOrderId == dto.PurchaseOrderId &&
+                   Priority == dto.Priority;
+        }
     }
 
-    // Main DTO for POST body
     public class DeliveryAssignmentCreateDTO
     {
         [Required]
@@ -27,10 +32,21 @@ namespace AppForSEII2526.API.DTOs.DeliveryDTOs
         [StringLength(200, ErrorMessage = "Personal message cannot exceed 200 characters.")]
         public string? PersonalMessage { get; set; }
 
+        [Required]
         public DateTime Deadline { get; set; }
 
         [Required]
         [MinLength(1, ErrorMessage = "At least one purchase order must be selected.")]
-        public IList<OrderPriorityDTO> OrdersToAssign { get; set; }
+        public IList<OrderPriorityDTO> OrdersToAssign { get; set; } = new List<OrderPriorityDTO>();
+
+        public override bool Equals(object? obj)
+        {
+            return obj is DeliveryAssignmentCreateDTO dto &&
+                   DeliveryDriverId == dto.DeliveryDriverId &&
+                   ExtraReward == dto.ExtraReward &&
+                   PersonalMessage == dto.PersonalMessage &&
+                   Deadline == dto.Deadline &&
+                   OrdersToAssign.SequenceEqual(dto.OrdersToAssign);
+        }
     }
 }
