@@ -1,0 +1,5 @@
+﻿SET IDENTITY_INSERT [dbo].[PurchaseOrders] ON
+INSERT INTO [dbo].[PurchaseOrders] ([Id], [City], [Date], [Description], [NameSurname], [PostalCode], [Rating], [Street], [TotalPrice], [PaymentMethodId], [State], [CustomerId]) VALUES (1, N'Madrid', N'2025-11-13 19:40:00', N'Order for electronic goods', N'Ana García', N'28001', 3, N'Calle Mayor, 15', CAST(89.99 AS Decimal(10, 2)), 1, 0, N'1')
+INSERT INTO [dbo].[PurchaseOrders] ([Id], [City], [Date], [Description], [NameSurname], [PostalCode], [Rating], [Street], [TotalPrice], [PaymentMethodId], [State], [CustomerId]) VALUES (2, N'Barcelona', N'2025-11-12 19:40:00', N'Groceries delivery', N'Marco Pérez', N'08005', 5, N'Avenida Diagonal, 220', CAST(45.50 AS Decimal(10, 2)), 2, 0, N'2')
+INSERT INTO [dbo].[PurchaseOrders] ([Id], [City], [Date], [Description], [NameSurname], [PostalCode], [Rating], [Street], [TotalPrice], [PaymentMethodId], [State], [CustomerId]) VALUES (3, N'Sevilla', N'2025-11-13 14:40:00', N'Book and stationery order', N'Laura Martínez', N'41002', 4, N'Plaza Nueva, 5', CAST(22.75 AS Decimal(10, 2)), 3, 0, N'3')
+SET IDENTITY_INSERT [dbo].[PurchaseOrders] OFF

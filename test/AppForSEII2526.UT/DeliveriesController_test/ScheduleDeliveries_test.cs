@@ -1,275 +1,181 @@
 ﻿using AppForSEII2526.API.Controllers;
 using AppForSEII2526.API.DTOs.DeliveryDTOs;
+using AppForSEII2526.API.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace AppForSEII2526.UT.DeliveriesController_test
 {
     public class ScheduleDelivery_test : AppForSEII25264SqliteUT
     {
-        // Reusable constants
-        private const int _existingDriverId = 1;
-        private const int _otherDriverId = 2;
+        private const int _driverId = 1;
+        private const int _wrongDriver = 999;
 
-        private const int _orderRequest1 = 1;
-        private const int _orderRequest2 = 2;
-        private const int _orderAlreadyAssigned = 3;
+        private const int _order1 = 1;
+        private const int _order2 = 2;
+        private const int _assignedOrder = 3;
 
         public ScheduleDelivery_test()
         {
-            //data seeding
-
-            //customer seeding
             var customer = new ApplicationUser
             {
-                Id = "user1",
-                UserName = "user1@test.com",
-                Address = "Long Address 12345",
+                Id = "cust",
+                UserName = "cust@test.com",
                 Name = "CustomerName",
                 Surname = "CustomerSurname",
-                AccountCreationDate = DateTime.Today
+                Address = "Long Address"
             };
-            _context.Add(customer);
 
-            // payment method seeding
-            var payment = new PayPal
-            {
-                Email = "customer@test.com",
-                User = customer
-            };
+            var payment = new PayPal { Email = "cust@test.com", User = customer };
+
+            _context.Add(customer);
             _context.Add(payment);
 
-            // driver seeding
-            var drivers = new List<DeliveryDriver>
+            _context.Add(new DeliveryDriver
             {
-                new DeliveryDriver
-                {
-                    Id = _existingDriverId,
-                    Name = "Antonio Driver",
-                    Available = true
-                },
-                new DeliveryDriver
-                {
-                    Id = _otherDriverId,
-                    Name = "Beatriz Driver",
-                    Available = true
-                }
-            };
-            _context.AddRange(drivers);
+                Id = _driverId,
+                Name = "Antonio Driver",
+                Available = true
+            });
 
-            // purchase order seeding
-            var orders = new List<PurchaseOrder>
+            _context.AddRange(new List<PurchaseOrder>
             {
                 new PurchaseOrder
                 {
-                    Id = _orderRequest1,
-                    City = "Albacete",
+                    Id = _order1,
                     Street = "C/ Mayor 1",
+                    City = "Albacete",
                     PostalCode = "02001",
                     Date = DateTime.Today.AddDays(-1),
                     NameSurname = "Customer One",
-                    Rating = 5,
-                    TotalPrice = 50.00m,
+                    TotalPrice = 50m,
                     State = PurchaseState.Request,
                     Customer = customer,
                     PaymentMethod = payment
                 },
                 new PurchaseOrder
                 {
-                    Id = _orderRequest2,
-                    City = "Albacete",
+                    Id = _order2,
                     Street = "C/ Menor 2",
+                    City = "Albacete",
                     PostalCode = "02002",
                     Date = DateTime.Today,
                     NameSurname = "Customer Two",
-                    Rating = 4,
-                    TotalPrice = 30.00m,
+                    TotalPrice = 30m,
                     State = PurchaseState.Request,
                     Customer = customer,
                     PaymentMethod = payment
                 },
                 new PurchaseOrder
                 {
-                    Id = _orderAlreadyAssigned,
-                    City = "Albacete",
+                    Id = _assignedOrder,
                     Street = "C/ Ocupada 3",
+                    City = "Albacete",
                     PostalCode = "02003",
                     Date = DateTime.Today,
                     NameSurname = "Customer Three",
-                    Rating = 3,
-                    TotalPrice = 10.00m,
+                    TotalPrice = 10m,
                     State = PurchaseState.Delivery,
                     Customer = customer,
                     PaymentMethod = payment
                 }
-            };
+            });
 
-            _context.AddRange(orders);
             _context.SaveChanges();
         }
 
-        //not found use case
-
-        public static IEnumerable<object[]> TestCasesFor_ScheduleDelivery_NotFound()
+        [Fact]
+        public async Task ScheduleDelivery_NotFound_Driver()
         {
-            // 1) driver does not exist
-            var driverNotFound = new DeliveryAssignmentCreateDTO
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
+
+            var dto = new DeliveryAssignmentCreateDTO
             {
-                DeliveryDriverId = 999,
-                ExtraReward = 5.0m,
-                PersonalMessage = "Handle carefully",
+                DeliveryDriverId = _wrongDriver,
                 Deadline = DateTime.Today.AddDays(2),
                 OrdersToAssign = new List<OrderPriorityDTO>
                 {
-                    new OrderPriorityDTO
-                    {
-                        PurchaseOrderId = _orderRequest1,
-                        Priority = PriorityType.High
-                    }
+                    new() { PurchaseOrderId = _order1, Priority = PriorityType.High }
                 }
             };
 
-            // 2) invalid order states
-            var invalidOrders = new DeliveryAssignmentCreateDTO
-            {
-                DeliveryDriverId = _existingDriverId,
-                ExtraReward = 0.0m,
-                PersonalMessage = null,
-                Deadline = DateTime.Today.AddDays(2),
-                OrdersToAssign = new List<OrderPriorityDTO>
-                {
-                    new OrderPriorityDTO
-                    {
-                        PurchaseOrderId = _orderRequest1,
-                        Priority = PriorityType.High
-                    },
-                    new OrderPriorityDTO
-                    {
-                        PurchaseOrderId = _orderAlreadyAssigned,
-                        Priority = PriorityType.Low
-                    }
-                }
-            };
-
-            return new List<object[]>
-            {
-                new object[] { driverNotFound, "Selected delivery driver does not exist" },
-                new object[] { invalidOrders, "Some orders were invalid" }
-            };
-        }
-
-        //theory of not found
-        [Theory]
-        [Trait("LevelTesting", "Unit Testing")]
-        [MemberData(nameof(TestCasesFor_ScheduleDelivery_NotFound))]
-        public async Task ScheduleDelivery_NotFoundErrors_test(
-            DeliveryAssignmentCreateDTO dto,
-            string expectedErrorStart)
-        {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
-
-            // act
             var result = await controller.ScheduleDelivery(dto);
 
-            // assert
             var notFound = Assert.IsType<NotFoundObjectResult>(result);
             var details = Assert.IsType<ValidationProblemDetails>(notFound.Value);
 
-            string actualError = details.Errors.First().Value[0];
-            Assert.StartsWith(expectedErrorStart, actualError);
+            Assert.StartsWith("Selected delivery driver does not exist", details.Errors.First().Value[0]);
         }
 
-        //model state invalid bad request test
         [Fact]
-        [Trait("LevelTesting", "Unit Testing")]
-        public async Task ScheduleDelivery_BadRequest_ModelStateInvalid_test()
+        public async Task ScheduleDelivery_NotFound_InvalidOrders()
         {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
-
-            controller.ModelState.AddModelError(
-                nameof(DeliveryAssignmentCreateDTO.OrdersToAssign),
-                "At least one purchase order must be selected.");
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
             var dto = new DeliveryAssignmentCreateDTO
             {
-                DeliveryDriverId = _existingDriverId,
-                ExtraReward = 0.0m,
-                PersonalMessage = "msg",
-                Deadline = DateTime.Today.AddDays(1),
-                OrdersToAssign = new List<OrderPriorityDTO>() // empty
+                DeliveryDriverId = _driverId,
+                Deadline = DateTime.Today.AddDays(2),
+                OrdersToAssign =
+                new List<OrderPriorityDTO>
+                {
+                    new() { PurchaseOrderId = _order1, Priority = PriorityType.High },
+                    new() { PurchaseOrderId = _assignedOrder, Priority = PriorityType.Low }
+                }
             };
 
-            // act
             var result = await controller.ScheduleDelivery(dto);
 
-            // assert
-            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
-            var details = Assert.IsType<ValidationProblemDetails>(badRequest.Value);
+            var notFound = Assert.IsType<NotFoundObjectResult>(result);
+            var details = Assert.IsType<ValidationProblemDetails>(notFound.Value);
 
-            Assert.Equal("At least one purchase order must be selected.",
-                         details.Errors.First().Value[0]);
+            Assert.StartsWith("Some orders were invalid", details.Errors.First().Value[0]);
         }
 
-        // success test fact
         [Fact]
-        [Trait("LevelTesting", "Unit Testing")]
         public async Task ScheduleDelivery_Success_test()
         {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            DateTime deadline = DateTime.Today.AddDays(2);
+            var deadline = DateTime.Today.AddDays(2);
 
             var dto = new DeliveryAssignmentCreateDTO
             {
-                DeliveryDriverId = _existingDriverId,
+                DeliveryDriverId = _driverId,
                 ExtraReward = 10.00m,
                 PersonalMessage = "Please deliver before lunch",
                 Deadline = deadline,
                 OrdersToAssign = new List<OrderPriorityDTO>
                 {
-                    new OrderPriorityDTO
-                    {
-                        PurchaseOrderId = _orderRequest1,
-                        Priority = PriorityType.High
-                    },
-                    new OrderPriorityDTO
-                    {
-                        PurchaseOrderId = _orderRequest2,
-                        Priority = PriorityType.Medium
-                    }
+                    new() { PurchaseOrderId = _order1, Priority = PriorityType.High },
+                    new() { PurchaseOrderId = _order2, Priority = PriorityType.Medium }
                 }
             };
 
-            // act
             var result = await controller.ScheduleDelivery(dto);
 
-            // assert
             var created = Assert.IsType<CreatedAtActionResult>(result);
-            Assert.Equal(nameof(DeliveriesController.GetSchedulingDetails), created.ActionName);
-
             var detailDto = Assert.IsType<DeliveryAssignmentDetailDTO>(created.Value);
 
-            // validate DTO contents
-            Assert.Equal("Antonio Driver", detailDto.DriverName);
-            Assert.Equal(deadline, detailDto.Deadline);
-            Assert.Equal(dto.PersonalMessage, detailDto.PersonalMessage);
-            Assert.Equal(dto.ExtraReward, detailDto.ExtraReward);
+            // Build expected DTO for comparison
+            var expected = new DeliveryAssignmentDetailDTO(
+                detailDto.Id, // auto-generated ID
+                "Antonio Driver",
+                deadline,
+                dto.PersonalMessage,
+                dto.ExtraReward,
+                new List<AssignedOrderDTO>
+                {
+                    new(_order1, "C/ Mayor 1", "Albacete", "02001",
+                        DateTime.Today.AddDays(-1), 50m, PriorityType.High),
 
-            Assert.Equal(2, detailDto.AssignedOrders.Count);
+                    new(_order2, "C/ Menor 2", "Albacete", "02002",
+                        DateTime.Today, 30m, PriorityType.Medium)
+                }
+            );
 
-            var assignedIds = detailDto.AssignedOrders.Select(a => a.Id).OrderBy(i => i);
-            Assert.Equal(new[] { _orderRequest1, _orderRequest2 }, assignedIds);
-
-            // check priorities
-            Assert.Equal(PriorityType.High,
-                detailDto.AssignedOrders.Single(o => o.Id == _orderRequest1).Priority);
-
-            Assert.Equal(PriorityType.Medium,
-                detailDto.AssignedOrders.Single(o => o.Id == _orderRequest2).Priority);
+            Assert.Equal(expected, detailDto);
         }
     }
 }

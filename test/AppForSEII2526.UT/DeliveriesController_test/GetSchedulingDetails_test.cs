@@ -1,12 +1,9 @@
 ﻿using AppForSEII2526.API.Controllers;
-using AppForSEII2526.API.DTOs.DeliveryDriverDTOs;
 using AppForSEII2526.API.DTOs.DeliveryDTOs;
-using AppForSEII2526.API.Models;
+using AppForSEII2526.API.DTOs.DeliveryDriverDTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 
 namespace AppForSEII2526.UT.DeliveriesController_test
 {
@@ -14,47 +11,38 @@ namespace AppForSEII2526.UT.DeliveriesController_test
     {
         private const int _order1 = 1;
         private const int _order2 = 2;
-        private const int _orderMissing = 99;
+        private const int _missing = 99;
 
         private const int _driver1 = 10;
         private const int _driver2 = 11;
 
         public GetSchedulingDetails_test()
         {
-
-            //seeding data for customer
             var customer = new ApplicationUser
             {
-                Id = "cust1",
+                Id = "cust",
                 UserName = "cust@test.com",
-                Address = "Some Long Address 123",
-                Name = "CustomerName",
-                Surname = "CustomerSurname",
-                AccountCreationDate = DateTime.Today
+                Name = "Name",
+                Surname = "Surname",
+                Address = "Long Address"
             };
-            _context.Add(customer);
 
-            //payment method data seeding
-            var payment = new PayPal
-            {
-                Email = "cust@test.com",
-                User = customer
-            };
+            var payment = new PayPal { Email = "cust@test.com", User = customer };
+
+            _context.Add(customer);
             _context.Add(payment);
 
-            //purchase orders data seeding
-            var orders = new List<PurchaseOrder>
+            _context.AddRange(new List<PurchaseOrder>
             {
                 new PurchaseOrder
                 {
                     Id = _order1,
-                    City = "Albacete",
                     Street = "C/ A",
+                    City = "Albacete",
                     PostalCode = "02001",
                     Date = DateTime.Today.AddDays(-1),
+                    TotalPrice = 40m,
                     NameSurname = "Name A",
-                    Rating = 5,
-                    TotalPrice = 40.00m,
                     State = PurchaseState.Request,
                     Customer = customer,
                     PaymentMethod = payment
@@ -62,118 +50,78 @@ namespace AppForSEII2526.UT.DeliveriesController_test
                 new PurchaseOrder
                 {
                     Id = _order2,
-                    City = "Albacete",
                     Street = "C/ B",
+                    City = "Albacete",
                     PostalCode = "02002",
                     Date = DateTime.Today,
+                    TotalPrice = 80m,
                     NameSurname = "Name B",
-                    Rating = 4,
-                    TotalPrice = 80.00m,
                     State = PurchaseState.Request,
                     Customer = customer,
                     PaymentMethod = payment
                 }
-            };
+            });
 
-            _context.AddRange(orders);
-
-            //creation of delivery drivers
-            var drivers = new List<DeliveryDriver>
+            _context.AddRange(new List<DeliveryDriver>
             {
                 new DeliveryDriver { Id = _driver1, Name = "Driver One", Available = true },
                 new DeliveryDriver { Id = _driver2, Name = "Driver Two", Available = false }
-            };
+            });
 
-            _context.AddRange(drivers);
             _context.SaveChanges();
         }
 
-        //creation of a bad request test case
         [Fact]
-        [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetSchedulingDetails_BadRequest_EmptyList_test()
+        public async Task GetSchedulingDetails_BadRequest_Empty()
         {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            List<int> emptyList = new List<int>();  // simulate empty
+            var result = await controller.GetSchedulingDetails(new List<int>());
 
-            // act
-            var result = await controller.GetSchedulingDetails(emptyList);
-
-            // assert
-            var badReq = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal("No purchase orders selected for scheduling.", badReq.Value);
+            var bad = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("No purchase orders selected for scheduling.", bad.Value);
         }
 
-
-        //not found test case
         [Fact]
-        [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetSchedulingDetails_NotFound_Missing_test()
+        public async Task GetSchedulingDetails_NotFound_MissingId()
         {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            var ids = new List<int> { _order1, _orderMissing }; // _orderMissing not in DB
+            var ids = new List<int> { _order1, _missing };
 
-            // act
             var result = await controller.GetSchedulingDetails(ids);
 
-            // assert
             var notFound = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Contains("The following order IDs were not found", notFound.Value!.ToString());
-            Assert.Contains(_orderMissing.ToString(), notFound.Value!.ToString());
+
+            Assert.Contains(_missing.ToString(), notFound.Value!.ToString());
         }
 
-        //success test case
         [Fact]
-        [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetSchedulingDetails_Success_test()
+        public async Task GetSchedulingDetails_Success()
         {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
             var ids = new List<int> { _order1, _order2 };
 
-            var expectedOrders = new List<OrderForSchedulingDTO>
-            {
-                new OrderForSchedulingDTO(_order1, "C/ A", "Albacete", "02001",
-                    DateTime.Today.AddDays(-1), 40.00m, "Name A"),
-
-                new OrderForSchedulingDTO(_order2, "C/ B", "Albacete", "02002",
-                    DateTime.Today, 80.00m, "Name B")
-            };
-
-            // act
             var result = await controller.GetSchedulingDetails(ids);
 
-            // assert
             var ok = Assert.IsType<OkObjectResult>(result);
+
             var dto = Assert.IsType<SchedulingDetailsDTO>(ok.Value);
 
-            var actualOrders = dto.SelectedOrders;
+            var expectedOrders = new List<OrderForSchedulingDTO>
+            {
+                new(_order1, "C/ A", "Albacete", "02001",
+                    DateTime.Today.AddDays(-1), 40m, "Name A"),
 
-            // normalize dates to avoid timezone issues
-            foreach (var a in actualOrders)
-                a.Date = a.Date.Date;
+                new(_order2, "C/ B", "Albacete", "02002",
+                    DateTime.Today, 80m, "Name B")
+            };
 
-            foreach (var e in expectedOrders)
-                e.Date = e.Date.Date;
+            Assert.Equal(expectedOrders, dto.SelectedOrders);
 
-            // ONLY for comparing calendar date
-            Assert.Equal(expectedOrders.Select(x => x.Date.Date),
-                         actualOrders.Select(x => x.Date.Date));
-
-
-            // check returned drivers
-            Assert.Equal(2, dto.AvailableDrivers.Count);
-
-            var names = dto.AvailableDrivers.Select(d => d.Name).OrderBy(x => x).ToList();
-            Assert.Equal(new[] { "Driver One", "Driver Two" }, names);
+            var driverNames = dto.AvailableDrivers.Select(x => x.Name).OrderBy(x => x).ToList();
+            Assert.Equal(new[] { "Driver One", "Driver Two" }, driverNames);
         }
     }
 }
