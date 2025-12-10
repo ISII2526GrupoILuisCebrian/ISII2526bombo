@@ -1,19 +1,20 @@
 ﻿using AppForSEII2526.API.Controllers;
 using AppForSEII2526.API.DTOs.DeliveryDriverDTOs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace AppForSEII2526.UT.DeliveriesController_test
 {
     public class GetAvailableOrders_test : AppForSEII25264SqliteUT
     {
-        // reusable values
         private const int _requestOrder1 = 1;
         private const int _requestOrder2 = 2;
         private const int _deliveryOrder = 3;
 
         public GetAvailableOrders_test()
         {
-            //filling the database with test data
-
+            // Seed customer
             var customer = new ApplicationUser
             {
                 Id = "cust1",
@@ -23,17 +24,19 @@ namespace AppForSEII2526.UT.DeliveriesController_test
                 Surname = "CustomerSurname",
                 AccountCreationDate = DateTime.Today
             };
-            _context.Add(customer);
 
+            // Seed payment
             var payment = new PayPal
             {
                 Email = "customer@test.com",
                 User = customer
             };
+
+            _context.Add(customer);
             _context.Add(payment);
 
-            // request-state orders
-            var orders = new List<PurchaseOrder>
+            // Seed purchase orders
+            _context.AddRange(new List<PurchaseOrder>
             {
                 new PurchaseOrder
                 {
@@ -43,7 +46,6 @@ namespace AppForSEII2526.UT.DeliveriesController_test
                     PostalCode = "02001",
                     Date = DateTime.Today.AddDays(-1),
                     NameSurname = "Name A",
-                    Rating = 5,
                     TotalPrice = 40.00m,
                     State = PurchaseState.Request,
                     Customer = customer,
@@ -57,14 +59,11 @@ namespace AppForSEII2526.UT.DeliveriesController_test
                     PostalCode = "02002",
                     Date = DateTime.Today,
                     NameSurname = "Name B",
-                    Rating = 4,
                     TotalPrice = 70.00m,
                     State = PurchaseState.Request,
                     Customer = customer,
                     PaymentMethod = payment
                 },
-
-                // delivery-state order (should not be retrieved)
                 new PurchaseOrder
                 {
                     Id = _deliveryOrder,
@@ -73,115 +72,92 @@ namespace AppForSEII2526.UT.DeliveriesController_test
                     PostalCode = "02003",
                     Date = DateTime.Today,
                     NameSurname = "Name C",
-                    Rating = 3,
                     TotalPrice = 5.00m,
                     State = PurchaseState.Delivery,
                     Customer = customer,
                     PaymentMethod = payment
                 }
-            };
+            });
 
-            _context.AddRange(orders);
             _context.SaveChanges();
         }
 
-
-        //bad request test case
         [Fact]
-        [Trait("LevelTesting", "Unit Testing")]
         public async Task GetAvailableOrders_BadRequest_WhenMinTotalPriceNegative_test()
         {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            // act
             var result = await controller.GetAvailableOrders(null, -1);
 
-            // assert
             var badReq = Assert.IsType<BadRequestObjectResult>(result);
             var details = Assert.IsType<ValidationProblemDetails>(badReq.Value);
 
-            Assert.StartsWith("Minimum total price cannot be negative",
-                              details.Errors.First().Value[0]);
+            Assert.StartsWith("Minimum total price cannot be negative", details.Errors.First().Value[0]);
         }
 
-
-        //success test cases with different filters
-        public static IEnumerable<object[]> TestCasesFor_GetAvailableOrders_OK()
+        public static IEnumerable<object[]> TestCases()
         {
-            // DTOs for expected lists (same DTO shape as controller)
-            var order1 = new OrderForSchedulingDTO(
-                _requestOrder1, "Street A", "Albacete", "02001",
-                DateTime.Today.AddDays(-1), 40.00m, "Name A");
-
-            var order2 = new OrderForSchedulingDTO(
-                _requestOrder2, "Street B", "Albacete", "02002",
-                DateTime.Today, 70.00m, "Name B");
-
-            var bothOrders = new List<OrderForSchedulingDTO> { order1, order2 };
-            var only1 = new List<OrderForSchedulingDTO> { order1 };
-            var only2 = new List<OrderForSchedulingDTO> { order2 };
-
             return new List<object[]>
             {
-                // no filters
-                new object[] { null, null, bothOrders },
+                new object[]
+                {
+                    null,
+                    null,
+                    new List<OrderForSchedulingDTO>
+                    {
+                        new(_requestOrder1, "Street A", "Albacete", "02001",
+                            DateTime.Today.AddDays(-1), 40.00m, "Name A"),
 
-                // postalCode filter matches only order1
-                new object[] { "02001", null, only1 },
-
-                // minTotalPrice filter picks only order2
-                new object[] { null, 60.00m, only2 },
-
-                // combined: postalCode=02002 AND price>=70 to only order2
-                new object[] { "02002", 70.00m, only2 },
+                        new(_requestOrder2, "Street B", "Albacete", "02002",
+                            DateTime.Today, 70.00m, "Name B")
+                    }
+                },
+                new object[]
+                {
+                    "02001",
+                    null,
+                    new List<OrderForSchedulingDTO>
+                    {
+                        new(_requestOrder1, "Street A", "Albacete", "02001",
+                            DateTime.Today.AddDays(-1), 40.00m, "Name A")
+                    }
+                },
+                new object[]
+                {
+                    null,
+                    60.00m,
+                    new List<OrderForSchedulingDTO>
+                    {
+                        new(_requestOrder2, "Street B", "Albacete", "02002",
+                            DateTime.Today, 70.00m, "Name B")
+                    }
+                }
             };
         }
 
         [Theory]
-        [Trait("LevelTesting", "Unit Testing")]
-        [MemberData(nameof(TestCasesFor_GetAvailableOrders_OK))]
-        public async Task GetAvailableOrders_OK_FilterTests(
-            string? postalCode,
-            decimal? minTotalPrice,
-            List<OrderForSchedulingDTO> expectedOrders)
+        [MemberData(nameof(TestCases))]
+        public async Task GetAvailableOrders_OK_test(string? postal, decimal? minPrice, List<OrderForSchedulingDTO> expected)
         {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            // act
-            var result = await controller.GetAvailableOrders(postalCode, minTotalPrice);
+            var result = await controller.GetAvailableOrders(postal, minPrice);
 
-            // assert
             var ok = Assert.IsType<OkObjectResult>(result);
             var actual = Assert.IsType<List<OrderForSchedulingDTO>>(ok.Value);
 
-            Assert.Equal(expectedOrders.Select(x => x.Date.Date),
-             actual.Select(x => x.Date.Date));
-
+            Assert.Equal(expected, actual);
         }
 
-
-        //not found test case
         [Fact]
-        [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetAvailableOrders_NotFound_WhenNoOrdersMatch_test()
+        public async Task GetAvailableOrders_NotFound_test()
         {
-            // arrange
-            var mock = new Mock<ILogger<DeliveriesController>>();
-            var controller = new DeliveriesController(_context, mock.Object);
+            var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            // act
-            // strict filter to ensure no matches
-            var result = await controller.GetAvailableOrders("NOPOSTAL", 9999);
+            var result = await controller.GetAvailableOrders("NOMATCH", 9999);
 
-            // assert
             var notFound = Assert.IsType<NotFoundObjectResult>(result);
-            var message = Assert.IsType<string>(notFound.Value);
-
-            Assert.Equal("No purchase orders available for scheduling.", message);
+            Assert.Equal("No purchase orders available for scheduling.", notFound.Value);
         }
     }
 }
