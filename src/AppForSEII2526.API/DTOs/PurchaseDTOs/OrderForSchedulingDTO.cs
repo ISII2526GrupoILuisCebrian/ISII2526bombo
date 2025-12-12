@@ -1,4 +1,4 @@
-﻿namespace AppForSEII2526.API.DTOs.DeliveryDriverDTOs
+﻿namespace AppForSEII2526.API.DTOs.PurchaseDTOs
 {
     public class OrderForSchedulingDTO
     {

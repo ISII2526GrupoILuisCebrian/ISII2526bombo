@@ -1,5 +1,5 @@
 ﻿using AppForSEII2526.API.Controllers;
-using AppForSEII2526.API.DTOs.DeliveryDriverDTOs;
+using AppForSEII2526.API.DTOs.PurchaseDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -14,7 +14,6 @@ namespace AppForSEII2526.UT.DeliveriesController_test
 
         public GetAvailableOrders_test()
         {
-            // Seed customer
             var customer = new ApplicationUser
             {
                 Id = "cust1",
@@ -25,7 +24,6 @@ namespace AppForSEII2526.UT.DeliveriesController_test
                 AccountCreationDate = DateTime.Today
             };
 
-            // Seed payment
             var payment = new PayPal
             {
                 Email = "customer@test.com",
@@ -35,7 +33,6 @@ namespace AppForSEII2526.UT.DeliveriesController_test
             _context.Add(customer);
             _context.Add(payment);
 
-            // Seed purchase orders
             _context.AddRange(new List<PurchaseOrder>
             {
                 new PurchaseOrder

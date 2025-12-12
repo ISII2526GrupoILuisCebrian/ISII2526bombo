@@ -1,9 +1,9 @@
 ﻿using AppForSEII2526.API.Controllers;
 using AppForSEII2526.API.DTOs.DeliveryDTOs;
-using AppForSEII2526.API.DTOs.DeliveryDriverDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using AppForSEII2526.API.DTOs.PurchaseDTOs;
 
 namespace AppForSEII2526.UT.DeliveriesController_test
 {
@@ -15,7 +15,6 @@ namespace AppForSEII2526.UT.DeliveriesController_test
 
         private const int _driver1 = 10;
         private const int _driver2 = 11;
-
         public GetSchedulingDetails_test()
         {
             var customer = new ApplicationUser
