@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\swagger2.json" ClassName="DeliveryAppAPIClient">
+    <OpenApiReference Include="OpenAPIs\swagger2.json" ClassName="DeliveryAppAPIClient" Namespace="AppForSEII2526.Web.API">
       <SourceUri>https://appfordelivery-b2f6bpbzgebkfaby.spaincentral-01.azurewebsites.net/swagger/v1/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
