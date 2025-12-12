@@ -1,0 +1,169 @@
+﻿@page "/delivery/selectorders"
+
+@using Microsoft.AspNetCore.Authorization
+@using AppForSEII2526.Web.API
+@using AppForSEII2526.Web.Components.Shared
+@inject DeliveryAppAPIClient apiclient
+@inject ILogger<SelectOrdersForDelivery> logger
+@inject DeliveryStateContainer deliveryState
+@inject NavigationManager navigation
+
+@attribute [Authorize]
+
+<h3>Select Orders for Delivery</h3>
+
+<div class="container-fluid">
+
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <div class="row mb-3">
+
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text">Postal Code</span>
+                        <input type="text" @bind="filterPostalCode" class="form-control" id="inputPostalCode" />
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text">Min Price</span>
+                        <InputNumber TValue="decimal?" @bind-Value="filterMinPrice" class="form-control" id="inputMinPrice" />
+                    </div>
+                </div>
+
+                <div class="col">
+                    <button class="btn btn-primary" @onclick="SearchOrders" id="searchOrders">Search Orders</button>
+                </div>
+
+            </div>
+
+            <div class="row">
+                @if (orders == null)
+                {
+                    <p>Loading orders...</p>
+                }
+                else
+                {
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfOrders">
+                            <thead>
+                                <tr>
+                                    <th>Street</th>
+                                    <th>City</th>
+                                    <th>Postal Code</th>
+                                    <th>Date</th>
+                                    <th>Total Price</th>
+                                    <th>Select</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in orders)
+                                {
+                                    <tr id="OrderRow_@order.Id">
+                                        <td>@order.Street</td>
+                                        <td>@order.City</td>
+                                        <td>@order.PostalCode</td>
+                                        <td>@order.Date.DateTime.ToShortDateString()</td>
+                                        <td>@order.TotalPrice €</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary"
+                                                    id="orderSelect_@order.Id"
+                                                    @onclick="@(() => AddOrder(order))">
+                                                Add
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-2" hidden="@hideSelectedOrders">
+            <div class="row">
+                <h3>Selected Orders</h3>
+            </div>
+
+            @foreach (var item in deliveryState.SelectedOrders)
+            {
+                <div class="row">
+                    <button type="button"
+                            class="btn btn-light"
+                            id="removeOrder_@item.Order.Id"
+                            @onclick="@(() => RemoveOrder(item.Order.Id))">
+                        x @item.Order.Street (@item.Order.TotalPrice €)
+                    </button>
+                </div>
+            }
+
+            <div class="row mt-3">
+                <button class="btn btn-primary"
+                        id="continueButton"
+                        @onclick="ContinueToNextPage"
+                        disabled="@continueDisabled">
+                    Continue
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private ICollection<OrderForSchedulingDTO>? orders;
+
+    private string? filterPostalCode;
+    private decimal? filterMinPrice;
+
+    private string errors = "";
+    private bool hideErrors => string.IsNullOrEmpty(errors);
+
+    private bool hideSelectedOrders => deliveryState.SelectedOrders.Count == 0;
+    private bool continueDisabled => deliveryState.SelectedOrders.Count == 0;
+
+    private void AddOrder(OrderForSchedulingDTO order)
+    {
+        deliveryState.AddOrder(order);
+    }
+
+    private void RemoveOrder(int orderId)
+    {
+        deliveryState.RemoveOrder(orderId);
+    }
+
+    private async Task SearchOrders()
+    {
+        try
+        {
+            double? min = filterMinPrice is null ? null : (double?)filterMinPrice.Value;
+            orders = await apiclient.GetAvailableOrdersAsync(filterPostalCode, min);
+            errors = "";
+        }
+        catch (ApiException ex)
+        {
+            logger.LogError($"Error retrieving orders: {ex}");
+            errors = "No orders found.";
+        }
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SearchOrders();
+    }
+
+
+
+    private void ContinueToNextPage()
+    {
+        navigation.NavigateTo("/delivery/details");
+    }
+}

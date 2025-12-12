@@ -1,0 +1,75 @@
+﻿@page "/delivery/assignmentdetail"
+@using AppForSEII2526.Web.API
+@inject DeliveryStateContainer deliveryState
+@using Microsoft.AspNetCore.Authorization
+@using AppForSEII2526.Web.Components.Shared
+
+@attribute [Authorize]
+
+<h3>Delivery Assignment Details</h3>
+
+@if (assignment == null)
+{
+    <div class="alert alert-danger">
+        Error! No delivery assignment available.
+        Please create a new delivery assignment.
+    </div>
+}
+else
+{
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Driver</th>
+            <td id="DriverName">@assignment.DriverName</td>
+        </tr>
+        <tr>
+            <th>Deadline</th>
+            <td id="Deadline">@assignment.Deadline.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <th>Extra Reward</th>
+            <td id="ExtraReward">@assignment.ExtraReward?.ToString("0.00") €</td>
+        </tr>
+        <tr>
+            <th>Personal Message</th>
+            <td id="PersonalMessage">@assignment.PersonalMessage</td>
+        </tr>
+    </table>
+
+    <h4>Assigned Orders</h4>
+
+    <table class="table" id="AssignedOrders">
+        <thead>
+            <tr>
+                <th>Street</th>
+                <th>City</th>
+                <th>Postal Code</th>
+                <th>Date</th>
+                <th>Total Price</th>
+                <th>Priority</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in assignment.AssignedOrders)
+            {
+                <tr id="AssignedOrder_@order.Id">
+                    <td>@order.Street</td>
+                    <td>@order.City</td>
+                    <td>@order.PostalCode</td>
+                    <td>@order.Date.ToString("dd/MM/yyyy")</td>
+                    <td>@order.TotalPrice €</td>
+                    <td>@order.Priority</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private DeliveryAssignmentDetailDTO? assignment;
+
+    protected override void OnInitialized()
+    {
+        assignment = deliveryState.CreatedAssignment;
+    }
+}

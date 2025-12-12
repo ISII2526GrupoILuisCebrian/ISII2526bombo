@@ -1,0 +1,224 @@
+﻿@page "/delivery/details"
+@inject NavigationManager navigation
+@inject ILogger<CreateDeliveryAssignment> logger
+@inject DeliveryStateContainer deliveryState
+@inject DeliveryAppAPIClient apiclient
+@using Microsoft.AspNetCore.Authorization
+@using AppForSEII2526.Web.API
+@using AppForSEII2526.Web.Components.Shared
+
+@attribute [Authorize]
+
+<h3>Create Delivery Assignment</h3>
+
+@if (loading)
+{
+    <p>Loading scheduling details...</p>
+}
+else if (loadingError)
+{
+    <div class="alert alert-danger">@loadingMessage</div>
+}
+else
+{
+    <EditForm Model="formModel" OnValidSubmit="OpenConfirmDialog">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="alert alert-danger" />
+
+        <!-- error box -->
+        <div class="alert alert-danger" role="alert" hidden="@hideErrors">
+            <p>@messageError</p>
+        </div>
+
+        <div class="row g-3 mt-2">
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <InputSelect class="form-select" @bind-Value="formModel.DriverId" id="DriverSelect">
+                        <option value="0" disabled>Select driver</option>
+                        @foreach (var d in availableDrivers)
+                        {
+                            <option value="@d.Id">@d.Name (@(d.Available ? "Available" : "Busy"))</option>
+                        }
+                    </InputSelect>
+                    <label for="DriverSelect">Delivery Driver</label>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <InputDate @bind-Value="formModel.Deadline" class="form-control" id="Deadline" />
+                    <label for="Deadline">Deadline</label>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <InputNumber @bind-Value="formModel.ExtraReward" class="form-control" id="ExtraReward" />
+                    <label for="ExtraReward">Extra Reward (€)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="formModel.PersonalMessage" class="form-control" id="PersonalMessage" />
+                    <label for="PersonalMessage">Personal Message (Optional)</label>
+                </div>
+            </div>
+        </div>
+
+        <h4>Selected Orders</h4>
+
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th>Street</th>
+                        <th>City</th>
+                        <th>Postal Code</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in deliveryState.SelectedOrders)
+                    {
+                        <tr>
+                            <td>@item.Order.Street</td>
+                            <td>@item.Order.City</td>
+                            <td>@item.Order.PostalCode</td>
+                            <td>@item.Order.Date.DateTime.ToShortDateString()</td>
+                            <td>@item.Order.TotalPrice €</td>
+
+                            <td>
+                                <InputSelect class="form-select"
+                                             @bind-Value="item.Priority"
+                                             @onchange="@(_ => UpdatePriority(item))">
+                                    <option value="@PriorityType.Low">Low</option>
+                                    <option value="@PriorityType.Medium">Medium</option>
+                                    <option value="@PriorityType.High">High</option>
+                                </InputSelect>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- submit -->
+        <button class="btn btn-primary" type="submit"
+                disabled="@submitDisabled">
+            Confirm Delivery Assignment
+        </button>
+
+    </EditForm>
+}
+
+
+@if (dialogOpen)
+{
+    <Dialog Caption="Confirm Delivery Assignment"
+            Message="Do you want to assign these deliveries to the selected driver?"
+            OnClose="@OnDialogClose"
+            Type=Dialog.Category.SaveNot>
+    </Dialog>
+}
+
+@code {
+    private bool loading = true;
+    private bool loadingError = false;
+    private string loadingMessage = "";
+
+    private bool dialogOpen = false;
+
+    private string messageError = "";
+    private bool hideErrors => messageError.Length == 0;
+
+    private bool submitDisabled =>
+        deliveryState.SelectedOrders.Count == 0 ||
+        formModel.DriverId == 0;
+
+    private SchedulingDetailsDTO? schedulingDetails;
+    private List<DriverForAssignmentDTO> availableDrivers = new();
+
+    public DeliveryFormModel formModel { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // build request for scheduling details
+            var orderIds = deliveryState.SelectedOrders.Select(o => o.Order.Id).ToList();
+            schedulingDetails = await apiclient.GetSchedulingDetailsAsync(orderIds);
+
+            availableDrivers = schedulingDetails.AvailableDrivers.ToList();
+
+            loading = false;
+        }
+        catch (ApiException ex)
+        {
+            loadingError = true;
+            loadingMessage = "Error retrieving scheduling information.";
+            loading = false;
+            logger.LogError(ex, "Error loading scheduling details.");
+        }
+    }
+
+    //priority logic
+    private void UpdatePriority(DeliveryOrderSelection item)
+    {
+        deliveryState.SetPriority(item.Order.Id, item.Priority);
+    }
+
+    private void OpenConfirmDialog()
+    {
+        dialogOpen = true;
+    }
+
+    private async Task OnDialogClose(bool confirmed)
+    {
+        dialogOpen = false;
+        if (!confirmed)
+            return;
+
+        try
+        {
+            deliveryState.SetDriver(
+                availableDrivers.First(d => d.Id == formModel.DriverId));
+            deliveryState.SetDeadline(formModel.Deadline);
+            deliveryState.SetExtraReward(formModel.ExtraReward);
+            deliveryState.SetPersonalMessage(formModel.PersonalMessage);
+
+            var dto = deliveryState.BuildRequestDTO();
+            var created = await apiclient.ScheduleDeliveryAsync(dto);
+
+            deliveryState.SetCreatedAssignment(created);
+            deliveryState.ResetSchedulingData();
+
+            navigation.NavigateTo("/delivery/assignmentdetail");
+        }
+        catch (ApiException<ValidationProblemDetails> vex)
+        {
+            messageError = string.Join(" | ",
+                vex.Result.Errors.SelectMany(e => e.Value));
+        }
+        catch (ApiException ex)
+        {
+            messageError = "Error while processing your request.";
+            logger.LogError(ex, "Error scheduling delivery.");
+        }
+    }
+
+
+    public class DeliveryFormModel
+    {
+        public int DriverId { get; set; }
+        public DateTime Deadline { get; set; } = DateTime.Today.AddDays(1);
+        public decimal? ExtraReward { get; set; }
+        public string? PersonalMessage { get; set; }
+    }
+}

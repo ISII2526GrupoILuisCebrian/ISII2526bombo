@@ -158,7 +158,6 @@ namespace AppForSEII2526.UT.DeliveriesController_test
             var created = Assert.IsType<CreatedAtActionResult>(result);
             var detailDto = Assert.IsType<DeliveryAssignmentDetailDTO>(created.Value);
 
-            // Build expected DTO for comparison
             var expected = new DeliveryAssignmentDetailDTO(
                 detailDto.Id, // auto-generated ID
                 "Antonio Driver",

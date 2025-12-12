@@ -116,7 +116,7 @@ namespace AppForSEII2526.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DetailedDescription")
+                    b.Property<string>("DetailedDesciption")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -134,10 +134,10 @@ namespace AppForSEII2526.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DetailedDescription")
+                    b.HasIndex("DetailedDesciption")
                         .IsUnique();
 
-                    b.ToTable("BanReports");
+                    b.ToTable("BanReports", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.Brand", b =>
@@ -163,7 +163,7 @@ namespace AppForSEII2526.API.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.Complaint", b =>
@@ -197,7 +197,7 @@ namespace AppForSEII2526.API.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Complaints");
+                    b.ToTable("Complaints", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.ComplaintType", b =>
@@ -215,7 +215,7 @@ namespace AppForSEII2526.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ComplaintTypes");
+                    b.ToTable("ComplaintTypes", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.DeliveryAssignment", b =>
@@ -244,7 +244,7 @@ namespace AppForSEII2526.API.Migrations
 
                     b.HasIndex("DeliveryDriverId");
 
-                    b.ToTable("DeliveryAssignments");
+                    b.ToTable("DeliveryAssignments", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.DeliveryDriver", b =>
@@ -268,7 +268,7 @@ namespace AppForSEII2526.API.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("DeliveryDrivers");
+                    b.ToTable("DeliveryDrivers", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.PaymentMethod", b =>
@@ -291,7 +291,7 @@ namespace AppForSEII2526.API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PaymentMethods");
+                    b.ToTable("PaymentMethods", (string)null);
 
                     b.HasDiscriminator<string>("PaymentMethodType").HasValue("PaymentMethod");
 
@@ -340,7 +340,7 @@ namespace AppForSEII2526.API.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.PurchaseDelivery", b =>
@@ -362,7 +362,7 @@ namespace AppForSEII2526.API.Migrations
                     b.HasIndex("PurchaseOrderId")
                         .IsUnique();
 
-                    b.ToTable("PurchaseDeliveries");
+                    b.ToTable("PurchaseDeliveries", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.PurchaseOrder", b =>
@@ -422,7 +422,7 @@ namespace AppForSEII2526.API.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("PurchaseOrders");
+                    b.ToTable("PurchaseOrders", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.PurchaseProduct", b =>
@@ -444,7 +444,7 @@ namespace AppForSEII2526.API.Migrations
 
                     b.HasIndex("PurchaseOrderId");
 
-                    b.ToTable("PurchaseProducts");
+                    b.ToTable("PurchaseProducts", (string)null);
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.ReportCustomer", b =>
@@ -466,7 +466,7 @@ namespace AppForSEII2526.API.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("ReportCustomers");
+                    b.ToTable("ReportCustomers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

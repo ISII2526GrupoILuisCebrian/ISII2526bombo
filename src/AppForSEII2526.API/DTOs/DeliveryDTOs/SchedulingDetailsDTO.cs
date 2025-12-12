@@ -1,4 +1,4 @@
-﻿using AppForSEII2526.API.DTOs.DeliveryDriverDTOs;
+﻿using AppForSEII2526.API.DTOs.PurchaseDTOs;
 
 namespace AppForSEII2526.API.DTOs.DeliveryDTOs
 {
