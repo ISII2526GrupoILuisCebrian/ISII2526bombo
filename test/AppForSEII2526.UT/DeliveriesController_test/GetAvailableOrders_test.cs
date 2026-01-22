@@ -84,7 +84,7 @@ namespace AppForSEII2526.UT.DeliveriesController_test
         {
             var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            var result = await controller.GetAvailableOrders(null, -1);
+            var result = await controller.GetAvailableOrders(null, -1, "Nonexistant street");
 
             var badReq = Assert.IsType<BadRequestObjectResult>(result);
             var details = Assert.IsType<ValidationProblemDetails>(badReq.Value);
@@ -100,19 +100,18 @@ namespace AppForSEII2526.UT.DeliveriesController_test
                 {
                     null,
                     null,
+                    "Street A",
                     new List<OrderForSchedulingDTO>
                     {
                         new(_requestOrder1, "Street A", "Albacete", "02001",
-                            DateTime.Today.AddDays(-1), 40.00m, "Name A"),
-
-                        new(_requestOrder2, "Street B", "Albacete", "02002",
-                            DateTime.Today, 70.00m, "Name B")
+                            DateTime.Today.AddDays(-1), 40.00m, "Name A")
                     }
                 },
                 new object[]
                 {
                     "02001",
                     null,
+                    "Street A",
                     new List<OrderForSchedulingDTO>
                     {
                         new(_requestOrder1, "Street A", "Albacete", "02001",
@@ -123,22 +122,36 @@ namespace AppForSEII2526.UT.DeliveriesController_test
                 {
                     null,
                     60.00m,
+                    "Street B",
+                    new List<OrderForSchedulingDTO>
+                    {
+                        new(_requestOrder2, "Street B", "Albacete", "02002",
+                            DateTime.Today, 70.00m, "Name B")
+                    }
+                },
+                new object[]
+                {
+                    null,
+                    null,
+                    "Street B",
                     new List<OrderForSchedulingDTO>
                     {
                         new(_requestOrder2, "Street B", "Albacete", "02002",
                             DateTime.Today, 70.00m, "Name B")
                     }
                 }
+
+
             };
         }
 
         [Theory]
         [MemberData(nameof(TestCases))]
-        public async Task GetAvailableOrders_OK_test(string? postal, decimal? minPrice, List<OrderForSchedulingDTO> expected)
+        public async Task GetAvailableOrders_OK_test(string? postal, decimal? minPrice, string street, List<OrderForSchedulingDTO> expected)
         {
             var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            var result = await controller.GetAvailableOrders(postal, minPrice);
+            var result = await controller.GetAvailableOrders(postal, minPrice, street);
 
             var ok = Assert.IsType<OkObjectResult>(result);
             var actual = Assert.IsType<List<OrderForSchedulingDTO>>(ok.Value);
@@ -151,7 +164,7 @@ namespace AppForSEII2526.UT.DeliveriesController_test
         {
             var controller = new DeliveriesController(_context, new Mock<ILogger<DeliveriesController>>().Object);
 
-            var result = await controller.GetAvailableOrders("NOMATCH", 9999);
+            var result = await controller.GetAvailableOrders("NOMATCH", 9999, "STREET");
 
             var notFound = Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal("No purchase orders available for scheduling.", notFound.Value);
