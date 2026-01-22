@@ -1,6 +1,4 @@
-﻿/* =========================
-   DeliveryDrivers
-   ========================= */
+﻿
 SET IDENTITY_INSERT dbo.DeliveryDrivers ON;
 
 INSERT INTO dbo.DeliveryDrivers (Id, Available, Name) VALUES
@@ -11,9 +9,7 @@ INSERT INTO dbo.DeliveryDrivers (Id, Available, Name) VALUES
 SET IDENTITY_INSERT dbo.DeliveryDrivers OFF;
 
 
-/* =========================
-   AspNetUsers
-   ========================= */
+
 INSERT INTO dbo.AspNetUsers
 (Id, AccountCreationDate, Address, Name, Surname, UserName, NormalizedUserName,
  Email, NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp,
@@ -42,9 +38,7 @@ VALUES
  NULL, 0, 0, NULL, 1, 0);
 
 
-/* =========================
-   PaymentMethods
-   ========================= */
+
 SET IDENTITY_INSERT dbo.PaymentMethods ON;
 
 INSERT INTO dbo.PaymentMethods
@@ -57,9 +51,7 @@ VALUES
 SET IDENTITY_INSERT dbo.PaymentMethods OFF;
 
 
-/* =========================
-   PurchaseOrders
-   ========================= */
+
 SET IDENTITY_INSERT dbo.PurchaseOrders ON;
 
 INSERT INTO dbo.PurchaseOrders
@@ -78,9 +70,7 @@ VALUES
 SET IDENTITY_INSERT dbo.PurchaseOrders OFF;
 
 
-/* =========================
-   DeliveryAssignments
-   ========================= */
+
 SET IDENTITY_INSERT dbo.DeliveryAssignments ON;
 
 INSERT INTO dbo.DeliveryAssignments
@@ -92,10 +82,6 @@ VALUES
 
 SET IDENTITY_INSERT dbo.DeliveryAssignments OFF;
 
-
-/* =========================
-   PurchaseDeliveries
-   ========================= */
 INSERT INTO dbo.PurchaseDeliveries
 (DeliveryAssignmentId, PurchaseOrderId, Date, Priority)
 VALUES

@@ -27,7 +27,8 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetAvailableOrders(
              [FromQuery] string? postalCode,
-             [FromQuery] decimal? minTotalPrice)
+             [FromQuery] decimal? minTotalPrice,
+             [FromQuery] string expectedStreet)
         {
             // alt flow 2: validation check
             if (minTotalPrice < 0)
@@ -51,6 +52,8 @@ namespace AppForSEII2526.API.Controllers
             {
                 query = query.Where(o => o.TotalPrice >= minTotalPrice.Value);
             }
+
+            query = query.Where(o => o.Street.Equals(expectedStreet));
 
             // to dto
             var orders = await query
